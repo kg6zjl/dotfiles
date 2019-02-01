@@ -1,0 +1,9 @@
+.DS_Store
+.coverage/
+.vimrc
+.vscode/
+bin/
+vendor/
+*.exe
+.idea/
+*.iml
