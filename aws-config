@@ -1,0 +1,5 @@
+[default]
+region = us-west-1
+s3 =
+  signature_version = s3v4
+output=text
