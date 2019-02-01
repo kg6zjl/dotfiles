@@ -42,7 +42,7 @@ done
 #-----Bash Functions-----#
 ##########################
 
-function notes () { #print list of all .bash_profile functions
+function notes() { #print list of all .bash_profile functions
     grep "^function" $HOME/.bash_profile | grep -vi 'ignore' | sed 's/function//g' | sed 's/()//g' | tr -d '{}' | sort
 }
 
@@ -54,15 +54,15 @@ function pass() { #generate a unique password of n length, ie: pass 16
     fi
 }
 
-function code () { #open dir or file in VS Code
+function code() { #open dir or file in VS Code
     VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*
 }
 
-function dot () { #jump to dotfile dir
+function dot() { #jump to dotfile dir
     cd $HOME/git/dotfiles
 }
 
-function bashp () { #copy in latest dotfiles and source it
+function bashp() { #copy in latest dotfiles and source it
     cp $HOME/git/dotfiles/files/bash_profile_customizations.sh $HOME/.bash_profile
     cp $HOME/git/dotfiles/files/aws-config $HOME/.aws/config
     cp $HOME/git/dotfiles/files/vimrc $HOME/.vimrc
@@ -70,7 +70,7 @@ function bashp () { #copy in latest dotfiles and source it
     source $HOME/.bash_profile
 }
 
-function utc () { #print current time in various regions
+function utc() { #print current time in various regions
     echo
     echo "Local: $(date) ($(date +'%I:%M %p'))"
     echo "UTC:   $(date -u) ($(date -u +'%I:%M %p'))"
@@ -85,6 +85,10 @@ function utc () { #print current time in various regions
     echo
 }
 
-function ip () { #get my current external ip
+function ip() { #get my current external ip
     eval curl -s http://checkip.amazonaws.com/
+}
+
+function regions() { #fetch regions and display names from aws
+    aws --region us-east-1 lightsail get-regions | jq -r '.regions[] | "\(.name) - \(.displayName)"' | sort
 }
