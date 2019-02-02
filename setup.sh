@@ -17,11 +17,15 @@ function common-dirs() {
 }
 
 function ssh-setup() {
-    eval $(ssh-agent -s)
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        ssh-add -K $HOME/.ssh/$ssh_key
+    if ssh-add -l | grep -q "$ssh_key"; then
+        echo "ssh key $ssh_key is ready"
     else
-        ssh-add $HOME/.ssh/$ssh_key
+        eval $(ssh-agent -s)
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            ssh-add -K $HOME/.ssh/$ssh_key
+        else
+            ssh-add $HOME/.ssh/$ssh_key
+        fi
     fi
 }
 

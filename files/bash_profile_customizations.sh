@@ -28,7 +28,7 @@ echo "Bash history control settings: "$HISTCONTROL
 #-----Pip Config-----#
 export PIP_REQUIRE_VIRTUALENV=true
 
-#-----Venv Config-----#
+#-----Venv/Direnv Config-----#
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 #-----Add kubectl configs-----#
@@ -45,6 +45,21 @@ done
 function notes() { #print list of all .bash_profile functions
     grep "^function" $HOME/.bash_profile | grep -vi 'ignore' | sed 's/function//g' | sed 's/()//g' | tr -d '{}' | sort
 }
+
+function ssh-setup() { #setup default ssh key (ignore)
+    if ssh-add -l | grep -q "$1"; then
+        echo "ssh key $1 is ready"
+    else
+        eval $(ssh-agent -s)
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            ssh-add -K $HOME/.ssh/$1
+        else
+            ssh-add $HOME/.ssh/$1
+        fi
+    fi
+}
+
+ssh-setup id_rsa
 
 function pass() { #generate a unique password of n length, ie: pass 16
     if [[ "$OSTYPE" == *"darwin"* ]]; then
