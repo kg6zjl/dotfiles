@@ -46,6 +46,10 @@ function notes() { #print list of all .bash_profile functions
     grep "^function" $HOME/.bash_profile | grep -vi 'ignore' | sed 's/function//g' | sed 's/()//g' | tr -d '{}' | sort
 }
 
+function yaynay() {
+    curl -s https://yesno.wtf/api | jq -r '.answer'
+}
+
 function ssh-setup() { #setup default ssh key (ignore)
     if ssh-add -l | grep -q "$1"; then
         echo "ssh key $1 is ready"

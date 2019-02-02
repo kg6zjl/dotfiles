@@ -11,9 +11,11 @@ dotfiles=$git_dir/dotfiles
 
 function common-dirs() {
     mkdir -p $git_dir
-    mkdir -p $HOME/.aws/
-    mkdir -p $HOME/.ssh/
+    mkdir -p $HOME/.aws
+    mkdir -p $HOME/.ssh
     mkdir -p $HOME/.kube
+    mkdir -p $HOME/venvs
+    mkdir -p $HOME/bin
 }
 
 function ssh-setup() {
@@ -60,3 +62,9 @@ ssh-setup
 clone-dotfiles
 
 copy-dotfiles
+
+##############
+#call modules#
+##############
+
+bash $dotfiles/modules/venv-init.sh $git_dir
