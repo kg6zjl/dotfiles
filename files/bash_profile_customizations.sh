@@ -17,7 +17,7 @@ current_cluster() { #rancher cluster function for prompt (ignore)
 
 export -f show_virtual_env
 export -f parse_git_branch
-export -f current_rancher_cluster
+export -f current_cluster
 
 export PS1="\[\033[33m\]\$(show_virtual_env)\[\033[00m\]\u@\h: \[\033[32m\]\w \[\033[33m\]\$(parse_git_branch)\[\033[33m\]\$(current_cluster)\[\033[00m\]\n$ "
 
