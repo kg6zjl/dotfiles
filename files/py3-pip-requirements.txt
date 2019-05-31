@@ -12,7 +12,7 @@ ipaddr
 bs4
 configparser
 pylint
-ansible==2.6.11
+ansible==2.6.14
 awscli
 xmltodict
 dnspython
