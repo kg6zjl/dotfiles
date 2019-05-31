@@ -38,11 +38,19 @@ do
     export KUBECONFIG=$KUBECONFIG:$config
 done
 
+alias rk="kubectl"
+alias k="kubectl"
+alias tf="terraform"
+alias ll="ls -lah"
+if [[ "$OSTYPE" == *"darwin"* ]]; then
+    alias sed=gsed
+fi
+
 ##########################
 #-----Bash Functions-----#
 ##########################
 
-function notes() { #print list of all .bash_profile functions
+function notes() { #print list of all .bash_profile functions (via comments - excluding those with "ignore" in comment)
     grep "^function" $HOME/.bash_profile | grep -vi 'ignore' | sed 's/function//g' | sed 's/()//g' | tr -d '{}' | sort
 }
 
@@ -84,6 +92,11 @@ function code() { #open dir or file in VS Code
 
 function dot() { #jump to dotfile dir
     cd $HOME/git/dotfiles
+    git status
+    if [ "$1" = "pull" ]; then
+        git checkout master
+        git pull
+    fi
 }
 
 function bashp() { #copy in latest dotfiles and source it
@@ -115,4 +128,70 @@ function ip() { #get my current external ip
 
 function regions() { #fetch regions and display names from aws
     aws --region us-east-1 lightsail get-regions | jq -r '.regions[] | "\(.name) - \(.displayName)"' | sort
+}
+
+function kns () { #switch between kube namespaces (kubectl get namespaces to see available)
+    kubectl config set-context $(kubectl config current-context) --namespace=$1
+}
+
+function kube-namespace () { #automatically switch namespace when default is empty (ignore)
+    echo "Checking for pods in default namespace..."
+    kubectl get pods 2>&1 | grep 'No resources found.'
+    rc=$?
+    if [[ $rc == 0 ]]; then
+        namespace=$(rk get namespaces | grep -v 'NAME\|cattle-system\|ingress-nginx\|kube-public\|kube-system\|default' | head -n 1 | awk '{ print $1 }')
+        echo "Switching to $namespace"
+        kubectl config set-context $(kubectl config current-context) --namespace=$namespace
+    fi
+}
+
+function rancher-config-url() { #get kube config and set rancher context - uses api (automatically called - ignore)
+    mkdir -p $HOME/.kube/
+    mkdir -p $HOME/.kubeconfigs
+    CLUSTER_DATA=$(/usr/bin/curl -XGET -s -L "$RANCHER_URL/clusters?limit=-1&sort=name&name=$1" -H "cookie: R_SESS=$TOKEN")
+    CONFIG_URL=$(echo $CLUSTER_DATA | jq -r '.data[].actions.generateKubeconfig')
+    CLUSTER_ID=$(echo $CLUSTER_DATA | jq -r '.data[].id')
+    
+    echo "Setting up kubectl config for $1"
+    /usr/bin/curl -XPOST -s -L $CONFIG_URL -H "cookie: R_SESS=$TOKEN" | jq -r '.config' | tee $HOME/.kubeconfigs/$1.config > $HOME/.kube/config
+    
+    echo "Setting up ranchercli for $1"
+    PROJECT_ID=$(/usr/bin/curl -XGET -s -L "$RANCHER_URL/cluster/$CLUSTER_ID/namespaces?name=default" -H "cookie: R_SESS=$TOKEN" | jq -r '.data[].projectId' | awk '{ print $1 }')
+    rancher login --context $PROJECT_ID -t "$TOKEN" $RANCHER_URL
+}
+
+function rancher-kube-config () { #get kube config for current rancher cluster - uses ranchercli (automatically called - ignore)
+    cluster=$(rancher cluster | grep '^*' | awk '{ print $4 }')
+    mkdir -p $HOME/.kube/
+    mkdir -p $HOME/.kubeconfigs
+    rancher clusters kf $cluster | tee $HOME/.kubeconfigs/$cluster.config > $HOME/.kube/config
+    #cleanup to prevent cache errors
+    rm -rf $HOME/.kube/http-cache/*
+}
+
+function rancher-prod () { #setup rancher for prod
+    export RANCHER_URL=www.url.com
+    export R_PROFILE="prod"
+    TOKEN=$(credstash -p $R_PROFILE -r us-east-1 get rancher-cli-token)
+    if [ -n "$1" ]; then
+        rancher-config-url $1
+    else
+        rancher login -t "$TOKEN" $RANCHER_URL
+        rancher-kube-config
+    fi
+    kube-namespace
+}
+
+function gp() { # git push the current branch and set upstream tracking
+    unset branch
+    branch=$(parse_git_branch | tr -d '()')
+    if [[ "$branch" != *"master"* ]]; then
+        git push -u origin $branch
+    elif [[ "$branch" == *"master"* ]]; then
+        echo "refusing to push to master branch. create a branch and try again."
+    fi
+}
+
+function rgrep() { # recursive grep. example: `rg text`
+    grep -irn $1 .
 }
