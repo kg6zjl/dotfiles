@@ -65,6 +65,11 @@ function ssh-setup() { #setup default ssh key (ignore)
 
 ssh-setup id_rsa
 
+function awsenv() { #choose aws creds to push to env vars (example: awsenv tenable or awsenv reset)
+    unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_SESSION_TOKEN AWS_SECRET_ACCESS_KEY AWS_ACCESS_KEY_ID AWS_SECURITY_TOKEN
+    eval $(python3 $HOME/git/dotfiles/files/python-ini.py $HOME/.aws/credentials $1)
+}
+
 function pass() { #generate a unique password of n length, ie: pass 16
     if [[ "$OSTYPE" == *"darwin"* ]]; then
         eval pwgen -Bs $1 1 | tr -d '\n' | pbcopy;
