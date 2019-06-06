@@ -192,6 +192,29 @@ function gp() { # git push the current branch and set upstream tracking
     fi
 }
 
+function gm() { # git checkout master and git pull
+    git checkout master
+    checkoutrc=$?
+    branch=$(parse_git_branch | tr -d '()')
+    if [[ "$branch" != *"master"* || $checkoutrc != 0 ]]; then
+        echo "Failed to checkout master"
+    else
+        git pull
+        if [[ $? != 0 ]]; then
+            echo "Failed to pull master"
+        fi
+    fi
+}
+
+function gb() { # git checkout master, git pull, git checkout -b branch_name
+    gm #call gm function that git checkout master, git pull
+    if [[ ! -z "$1" ]]; then
+        git checkout -b $1
+    else
+        echo "You must pass a branch name"
+    fi
+}
+
 function rgrep() { # recursive grep. example: `rg text`
     grep -irn $1 .
 }
