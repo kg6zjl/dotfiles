@@ -218,3 +218,8 @@ function gb() { # git checkout master, git pull, git checkout -b branch_name
 function rgrep() { # recursive grep. example: `rg text`
     grep -irn $1 .
 }
+
+function kvpn() { #run telepresence on current context cluster
+    echo "connecting to cluster, this takes a while..."
+    telepresence --docker-run --rm -i -t path.to.repo.com/sre-ubuntu /bin/bash
+}
