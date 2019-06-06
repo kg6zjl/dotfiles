@@ -21,4 +21,4 @@ brew install pwgen watch tree tmux node npm kubectl jq gnu-sed telepresence
 brew install go dep
 
 #brew install kotlin related stuff
-brew install kotlin
+brew install kotlin gradle
