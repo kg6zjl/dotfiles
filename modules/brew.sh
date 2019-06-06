@@ -15,4 +15,10 @@ brew install openconnect --with-stoken
 brew install stoken
 
 #other misc brew installs
-brew install pwgen watch tree tmux node npm kubectl jq dep gnu-sed telepresence go
+brew install pwgen watch tree tmux node npm kubectl jq gnu-sed telepresence
+
+#brew install go related stuff
+brew install go dep
+
+#brew install kotlin related stuff
+brew install kotlin
