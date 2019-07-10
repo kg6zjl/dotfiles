@@ -239,3 +239,8 @@ if [[ "$OSTYPE" == *"darwin"* ]]; then
         VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*
     }
 fi
+
+function pr() { #get url of repo to start pr process in a browser
+    branch=$(parse_git_branch | tr -d '()')
+    echo "https://$(git ls-remote --get-url | sed 's/git@//g' | sed 's/.git//g' | tr ':' '/')/pull/new/$branch"
+}
