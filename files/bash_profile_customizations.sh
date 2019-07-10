@@ -242,5 +242,5 @@ fi
 
 function pr() { #get url of repo to start pr process in a browser
     branch=$(parse_git_branch | tr -d '()')
-    echo "https://$(git ls-remote --get-url | sed 's/git@//g' | sed 's/.git//g' | tr ':' '/')/pull/new/$branch"
+    echo "https://$(git ls-remote --get-url | sed 's|ssh:\/\/||g' | sed 's/git@//g' | sed 's/.git//g' | tr ':' '/')/pull/new/$branch"
 }
