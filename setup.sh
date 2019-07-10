@@ -19,6 +19,14 @@ function common-dirs() {
 }
 
 function ssh-setup() {
+    #set perms:
+    chmod 700 $HOME/.ssh
+    chmod 644 $HOME/.ssh/config
+    chmod 600 $HOME/.ssh/id_rsa
+    ssh-keygen -y -f $HOME/.ssh/id_rsa > $HOME/.ssh/id_rsa.pub
+    chmod 644 $HOME/.ssh/id_rsa.pub
+    
+    #add to agent:
     if ssh-add -l | grep -q "$ssh_key"; then
         echo "ssh key $ssh_key is ready"
     else
