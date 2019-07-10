@@ -86,10 +86,6 @@ function pass() { #generate a unique password of n length, ie: pass 16
     fi
 }
 
-function code() { #open dir or file in VS Code
-    VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*
-}
-
 function dot() { #jump to dotfile dir
     cd $HOME/git/dotfiles
     git status
@@ -223,3 +219,23 @@ function kvpn() { #run telepresence on current context cluster
     echo "connecting to cluster, this takes a while..."
     telepresence --docker-run --rm -i -t path.to.repo.com/sre-ubuntu /bin/bash
 }
+
+function open() { #open a file using the default/associated app in windows
+    #borrowed from https://superuser.com/a/1429272
+    if [[ $WSL_DISTRO_NAME == *"Ubuntu"* ]]; then
+        # get full unsymlinked filename
+        file=$(readlink -e $1)
+        dir=$(dirname "$file")
+        base=$(basename "$file")
+        # open item using default windows application
+        (cd "$dir"; explorer.exe "$base")
+    else
+        open $1
+    fi
+}
+
+if [[ "$OSTYPE" == *"darwin"* ]]; then
+    function code() { #open dir or file in VS Code (osx only)
+        VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*
+    }
+fi
