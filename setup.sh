@@ -16,6 +16,7 @@ function common-dirs() {
     mkdir -p $HOME/.kube
     mkdir -p $HOME/venvs
     mkdir -p $HOME/bin
+    mkdir -p $HOME/go
 }
 
 function ssh-setup() {
@@ -74,5 +75,8 @@ copy-dotfiles
 ##############
 #call modules#
 ##############
+
+bash $dotfiles/modules/pip.sh
+bash $dotfiles/modules/python.sh
 
 bash $dotfiles/modules/venv-init.sh $git_dir
