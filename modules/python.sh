@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [[ "$OSTYPE" == *"linux-gnu"* ]]; then
-    sudo apt update -y
+    sudo apt update -y && sudo apt upgrade -y
     sudo apt install -y python3
     sudo apt install -y python
 
