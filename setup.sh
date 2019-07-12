@@ -76,7 +76,7 @@ copy-dotfiles
 #call modules#
 ##############
 
-bash $dotfiles/modules/pip.sh
 bash $dotfiles/modules/python.sh
+bash $dotfiles/modules/pip.sh
 
 bash $dotfiles/modules/venv-init.sh $git_dir
