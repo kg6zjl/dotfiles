@@ -37,6 +37,8 @@ export PIP_REQUIRE_VIRTUALENV=true
 
 #-----Venv/Direnv Config-----#
 export VIRTUAL_ENV_DISABLE_PROMPT=1
+export DIRENV_LOG_FORMAT=
+eval "$(direnv hook bash)"
 
 #-----Add kubectl configs-----#
 unset KUBECONFIG && export KUBECONFIG=$HOME/.kube/config

@@ -2,10 +2,10 @@
 
 function get_direnv() {
     mkdir -p $HOME/bin
-    if [[ "$OSTYPE" == "darwin"* ]]; then
+    if [[ "$OSTYPE" == *"darwin"* ]]; then
         curl -s -L -o $HOME/bin/direnv https://github.com/direnv/direnv/releases/download/v2.18.2/direnv.darwin-386
     else
-        curl -s -L -o $HOME/bin/direnv https://github.com/direnv/direnv/releases/download/v2.18.2/direnv.linux-386
+        curl -s -L -o $HOME/bin/direnv https://github.com/direnv/direnv/releases/download/v2.20.0/direnv.linux-amd64
     fi
     sudo chmod +x $HOME/bin/direnv
 }
@@ -21,12 +21,7 @@ function allow_direnv() {
     $HOME/bin/direnv allow .
     echo "source \$HOME/venvs/$1/bin/activate" > .envrc
     $HOME/bin/direnv allow .
-    source $HOME/$1/bin/activate
-}
-
-function bashrc_setup() {
-    echo "PATH=$PATH:$HOME/bin" >> $HOME/.bashrc && source $HOME/.bashrc
-    echo "eval \"\$(direnv hook bash)\"" >> $HOME/.bashrc && source $HOME/.bashrc
+    source $HOME/venvs/$1/bin/activate
 }
 
 function python2_setup() {
@@ -38,6 +33,7 @@ function python2_setup() {
     pip install --upgrade pip
     pip install nose
     pip install -r $git_dir/dotfiles/files/py2-pip-requirements.txt
+    pip install -I awscli
 }
 
 function python3_setup() {
@@ -45,9 +41,10 @@ function python3_setup() {
         python3 -m venv $HOME/venvs/$1
     fi
     source $HOME/venvs/$1/bin/activate
-    pip install --upgrade pip
-    pip install nose
-    pip install -r $git_dir/dotfiles/files/py3-pip-requirements.txt
+    pip3 install --upgrade pip
+    pip3 install nose
+    pip3 install -r $git_dir/dotfiles/files/py3-pip-requirements.txt
+    pip3 install -I awscli
 }
 
 git_dir="$1"
@@ -57,7 +54,8 @@ py3-presetup
 get_direnv
 python2_setup venv-py2
 python3_setup venv-py3
-bashrc_setup
+
+source $HOME/.bash_profile
 
 #py3
 allow_direnv venv-py3 $git_dir

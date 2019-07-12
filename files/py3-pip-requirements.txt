@@ -13,7 +13,6 @@ bs4
 configparser
 pylint
 ansible==2.6.14
-awscli
 xmltodict
 dnspython
 datadog
