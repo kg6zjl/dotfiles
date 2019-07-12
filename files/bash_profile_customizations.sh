@@ -21,6 +21,13 @@ export -f current_cluster
 
 export PS1="\[\033[33m\]\$(show_virtual_env)\[\033[00m\]\u@\h: \[\033[32m\]\w \[\033[33m\]\$(parse_git_branch)\[\033[33m\]\$(current_cluster)\[\033[00m\]\n$ "
 
+#---set default shell location---#
+cd $HOME/git/
+
+#---set path locations---#
+export GOPATH=$HOME/go
+export PATH=$PATH:$HOME/.local/bin:$HOME/bin:$GOPATH/bin
+
 #-----Set History Control-----#
 export HISTCONTROL=ignorespace:ignoredups:erasedupes
 echo "Bash history control settings: "$HISTCONTROL
