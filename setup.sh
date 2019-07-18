@@ -78,5 +78,5 @@ copy-dotfiles
 
 bash $dotfiles/modules/python.sh
 bash $dotfiles/modules/pip.sh
-
 bash $dotfiles/modules/venv-init.sh $git_dir
+bash $dotfiles/modules/session-manager.sh
