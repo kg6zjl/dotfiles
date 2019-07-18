@@ -9,16 +9,19 @@ brew install python@2
 #python3 setup
 brew install python
 
+#setup java
+brew cask install java
+
 #setup for openconnect vpn client
 brew install gcc vpnc lz4 stoken gnutls
-brew install openconnect --with-stoken
 brew install stoken
 
 #other misc brew installs
-brew install pwgen watch tree tmux node npm kubectl jq gnu-sed telepresence
+brew install pwgen watch tree tmux node npm kubectl jq dep gcc llvm bash-completion maven osxfuse
 
-#brew install go related stuff
-brew install go dep
+#brew installs for kvpn tool
+brew install datawire/blackbird/telepresence dos2unix
 
-#brew install kotlin related stuff
-brew install kotlin gradle
+#replace sed with gnu-sed, and symlink since --with-default-names is not available now
+brew install gnu-sed #--with-default-names
+ln -s /usr/local/bin/gsed /usr/local/bin/sed
