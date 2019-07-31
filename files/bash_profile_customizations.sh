@@ -244,7 +244,7 @@ function open() { #open a file using the default/associated app in windows
 }
 
 if [[ "$OSTYPE" == *"darwin"* ]]; then
-    function code() { #open dir or file in VS Code (osx only)
+    function code() { #open dir or file in VS Code (osx only), WSL does this natively
         VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*
     }
 fi
@@ -252,4 +252,23 @@ fi
 function pr() { #get url of repo to start pr process in a browser
     branch=$(parse_git_branch | tr -d '()')
     echo "https://$(git ls-remote --get-url | sed 's|ssh:\/\/||g' | sed 's/git@//g' | sed 's/.git//g' | tr ':' '/')/pull/new/$branch"
+}
+
+function ssm() { #aws ssm - usage: ssm role:nginx group:b region:us-east-1
+    args=("$@")
+    END=`expr $# - 1`
+    unset SEARCH OUTPUT REGION
+
+    for i in $(seq 0 $END); do
+        key=$(echo ${args[$i]} | cut -d':' -f1 | tr '-' '_')
+        value=$(echo ${args[$i]} | cut -d':' -f2)
+        if [ "$key" == "region" ]; then
+            REGION=" --region ${value} "
+        else
+            SEARCH=${SEARCH}"\"Name=tag:${key},Values=${value}\" "
+        fi
+    done
+
+    OUTPUT=$(eval aws ec2 describe-instances ${REGION} --filters ${SEARCH} | jq -r '.Reservations[].Instances[].InstanceId' | head -n1)
+    eval aws ${REGION} ssm start-session --target ${OUTPUT}
 }
