@@ -272,3 +272,17 @@ function ssm() { #aws ssm - usage: ssm role:nginx group:b region:us-east-1
     OUTPUT=$(eval aws ec2 describe-instances ${REGION} --filters ${SEARCH} | jq -r '.Reservations[].Instances[].InstanceId' | head -n1)
     eval aws ${REGION} ssm start-session --target ${OUTPUT}
 }
+
+function lint() { #run python linters and security checks against a python file
+    dir=$(pwd)
+
+    cd $HOME/venvs/black
+    autopep8 -i $1
+    bandit -ll -ii $1
+    black $1
+    pylint $1
+
+    cd $dir
+    safety check --bare $1
+}
+
