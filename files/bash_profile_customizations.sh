@@ -25,8 +25,16 @@ export PS1="\[\033[33m\]\$(show_virtual_env)\[\033[00m\]\u@\h: \[\033[32m\]\w \[
 cd $HOME/git/
 
 #---set path locations---#
-export GOPATH=$HOME/go
-export PATH=$PATH:$HOME/.local/bin:$HOME/bin:$GOPATH/bin
+export GOPATH=${HOME}/go
+# full reset of path, and then add customizations
+export PATH=$(/usr/bin/getconf PATH)
+#add ruby and go bin dirs to path
+export PATH=${HOME}/.local/bin:/usr/local/opt/ruby/bin:${HOME}/bin:${GOPATH}/bin:${PATH}
+#add other common paths
+export PATH=${PATH}:/usr/local/sbin:/usr/local/bin
+
+#clean up dupes in path, and set paths with username at beginning of path
+export PATH=$(python $HOME/git/dotfiles/files/path-cleanup.py)
 
 #-----Set History Control-----#
 export HISTCONTROL=ignorespace:ignoredups:erasedupes
