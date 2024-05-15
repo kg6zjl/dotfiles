@@ -29,11 +29,14 @@
                     "foreground": "#100e23",
                     "powerline_symbol": "\ue0b0",
                     "properties": {
-                        "style": "full"
+                        "style": "agnoster_short",
+                        "max_depth": 3
                     },
                     "style": "powerline",
                     "template": " {{ .Path }} ",
-                    "type": "path"
+                    "type": "path",
+                    "max_depth": "2",
+                    "mixed_threshold": "4"
                 },
                 {
                     "background": "#95ffa4",
@@ -60,6 +63,17 @@
                     "template": " ⎈ {{.Context}}{{if .Namespace}} :: {{.Namespace}}{{end}} ",
                     "properties": {
                         "context_aliases": {}
+                    }
+                },
+                {
+                    "type": "command",
+                    "style": "powerline",
+                    "powerline_symbol": "\ue0b0",
+                    "foreground": "#546E7A",
+                    "background": "#26C6DA",
+                    "properties": {
+                      "shell": "bash",
+                      "command": "EXPIRATION=$(cat ${HOME}/.aws/sso/cache/*.json | jq -r '.expiresAt | fromdate - (fromdate % 1800)'); NOW=$(date +%s); REMAINING=$((EXPIRATION-NOW)); date -ud \"@$REMAINING\" +\"%H:%M\""
                     }
                 },
                 {
