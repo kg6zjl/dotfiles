@@ -27,6 +27,10 @@ alias tgapply="rm -rf .terragrunt-cache && terragrunt apply"
 alias lg="lazygit"
 alias pd="podman"
 
+# handle zsh auto-completion
+autoload -Uz compinit
+compinit
+
 # set up prompt
 eval "$(oh-my-posh --init --shell ${SHORT_SHELL} --config ${HOME}/oh-my-posh.omp.json)"
 
@@ -41,10 +45,6 @@ eval "$(direnv hook ${SHORT_SHELL})"
 
 # setup asdf
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
-
-# handle zsh completion
-autoload -Uz compinit
-compinit
 
 # setup switcher
 source <(switcher init ${SHORT_SHELL})
