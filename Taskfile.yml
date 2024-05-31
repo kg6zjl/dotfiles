@@ -75,7 +75,7 @@ tasks:
   brew-pkgs:
     aliases: [brew]
     cmds:
-      - for: [act,agg,asciinema,asdf,bash,kubectl,exiftool,ffmpeg,gh,git,git-lfs,grep,glow,gnu-sed,go,go-task,node,npm,gcc,llvm,maven,jsonlint,telnet,helm,helmfile,helmify,jq,k3d,kind,kubernetes-cli,librtlsdr,mcfly,node,podman,proxychains-ng,rustup-init,switch,switcher,tor,tree,x86_64-unknown-linux-gnu,yq,yt-dlp,watch,tmux,]
+      - for: [warrensbox/tap/tfswitch,warrensbox/tap/tgswitch,act,agg,asciinema,asdf,bash,kubectl,exiftool,ffmpeg,gh,git,git-lfs,grep,glow,gnu-sed,go,go-task,node,npm,gcc,llvm,maven,jsonlint,telnet,helm,helmfile,helmify,jq,k3d,kind,kubernetes-cli,librtlsdr,mcfly,node,podman,proxychains-ng,rustup-init,switch,switcher,tor,tree,x86_64-unknown-linux-gnu,yq,yt-dlp,watch,tmux,]
         task: brew-install
         vars:
           PKG: '{{.ITEM}}'
