@@ -76,7 +76,7 @@ tasks:
 
   mac:
     cmds:
-      - xcode-select --install
+      - xcode-select --install || echo "Already installed"
 
   brew-pkgs:
     aliases: [brew]
