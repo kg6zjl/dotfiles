@@ -2,6 +2,9 @@ export PATH="$HOME/.asdf/bin:$HOME/.asdf/shims:${HOME}/bin:${HOME}/go/bin:/opt/h
 export HISTCONTROL=ignorespace:ignoredupes:erasedups
 export DIRENV_LOG_FORMAT=
 export BASH_SILENCE_DEPRECATION_WARNING=1
+export SHORT_SHELL="$(echo $(basename $SHELL))"
+
+unset KUBECONFIG && export KUBECONFIG=${HOME}/.kube/config
 
 alias gs="git status"
 alias ga="git add \$(git status -s | grep '^M\|^??' | awk '{ print $2 }' | pick)"
@@ -9,20 +12,38 @@ alias gd="git rm \$(git status -s | grep '^D' | awk '{ print $2 }' | pick)"
 alias ll="ls -lah"
 alias icd="cd \`ls -d -1 */ | pick\`"
 alias ip="curl -s http://checkip.amazonaws.com"
+alias tf="terraform"
+alias tg="terragrunt"
+alias k="kubectl"
+alias kgp="kubectl get pods" # kube switch context
+alias ksc="switch --show-preview=false" # kube switch context
+alias kns="switch namespace" # kube namespace
+alias tfinit="rm -rf .terra* && terraform init"
+alias tfplan="terraform plan -out tfplan && echo 'or run tfapply'"
+alias tfapply='terraform apply "tfplan"'
+alias tginit="rm -rf .terragrunt-cache && terragrunt init"
+alias tgplan="rm -rf .terragrunt-cache && terragrunt plan"
+alias tgapply="rm -rf .terragrunt-cache && terragrunt apply"
+alias lg="lazygit"
+alias pd="podman"
 
 # set up prompt
-eval "$(oh-my-posh --init --shell zsh --config ${HOME}/oh-my-posh.omp.json)"
+eval "$(oh-my-posh --init --shell ${SHORT_SHELL} --config ${HOME}/oh-my-posh.omp.json)"
+
+# setup mcfly for history
+eval "$(mcfly init ${SHORT_SHELL})"
 
 # setup home brew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # setup direnv
-eval "$(direnv hook zsh)"
+eval "$(direnv hook ${SHORT_SHELL})"
 
 # setup asdf
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
-# fpath=(${ASDF_DIR}/completions $fpath) # /opt/homebrew/share/zsh/site-functions
-# autoload -Uz compinit && compinit
+
+# setup switcher
+source <(switcher init ${SHORT_SHELL})
 
 function git_master_branch() {
     master_branch=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)

@@ -1,0 +1,12 @@
+[filter "lfs"]
+        clean = git-lfs clean -- %f
+        smudge = git-lfs smudge -- %f
+        process = git-lfs filter-process
+        required = true
+[user]
+        name = Steve
+        email = 13557887+kg6zjl@users.noreply.github.com
+[push]
+        autoSetupRemote = true
+[pull]
+        rebase=true
