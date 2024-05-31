@@ -3,6 +3,3 @@ python                  latest 3.12.3 system
 awscli                  latest
 direnv                  latest
 terraform               latest
-# terragrunt              latest
-# kubectl                 latest
-
