@@ -9,6 +9,9 @@ Framework for my basic dev env. Trying to make it darwin and linux friendly!
 # brew install a few deps
 brew install direnv asdf go-task
 
+# generate a new ssh-key if you need one
+task ssh-key
+
 # kick off the setup
 task setup
 ```

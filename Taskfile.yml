@@ -5,7 +5,7 @@ env:
 
 tasks:
   setup:
-    deps: [dirs, files, init, ssh-key, brew, asdf, default-venv]
+    deps: [dirs, files, init, brew, asdf, default-venv]
 
   dirs:
     cmds:
@@ -66,9 +66,9 @@ tasks:
       - chmod 700 $HOME/.ssh
       - chmod 644 $HOME/.ssh/config || echo "Doesn't exist yet, skipping"
       - ssh-keygen -t rsa -b 4096 -f $HOME/.ssh/{{ .SSH_KEY }}
+      - chmod 600 $HOME/.ssh/{{ .SSH_KEY }}
       - ssh-keygen -y -f $HOME/.ssh/{{ .SSH_KEY }} > $HOME/.ssh/{{ .SSH_KEY }}.pub
       - chmod 644 $HOME/.ssh/{{ .SSH_KEY }}.pub
-      - chmod 600 $HOME/.ssh/{{ .SSH_KEY }}
     requires:
       vars: [SSH_KEY]
 
