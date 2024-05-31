@@ -1,0 +1,27 @@
+{
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.rulers": [80, 120],
+    "files.associations": {},
+    "workbench.colorTheme": "Visual Studio Dark",
+    "workbench.iconTheme": "vscode-icons",
+    "workbench.startupEditor": "newUntitledFile",
+    "extensions": {
+        "recommendations": [
+            "dbaeumer.vscode-eslint",
+            "esbenp.prettier-vscode",
+            "ms-vscode.vscode-typescript-tslint-plugin",
+            "msjsdiag.debugger-for-chrome",
+            "eamodio.gitlens"
+        ]
+    },
+    "security.workspace.trust.untrustedFiles": "open",
+    "editor.fontFamily": "MesloLGM Nerd Font, Menlo, Monaco, 'Courier New', monospace",
+    "editor.accessibilitySupport": "off",
+    "explorer.confirmDelete": false,
+    "files.autoSave": "afterDelay",
+    "explorer.confirmDragAndDrop": false,
+    "github.copilot.editor.enableAutoCompletions": true,
+    "git.openRepositoryInParentFolders": "always",
+    "telemetry.telemetryLevel": "off"
+}

@@ -1,0 +1,8 @@
+# plugin-name        git-url                                                    git-ref (hash, tag, or branch)
+asdf-plugin-manager  https://github.com/asdf-community/asdf-plugin-manager.git  54ac342
+awscli               https://github.com/amrox/asdf-pyapp.git                    41f5275
+rust                 https://github.com/code-lever/asdf-rust.git                95acf4f
+terraform            https://github.com/asdf-community/asdf-hashicorp.git       c048526
+golang               https://github.com/asdf-community/asdf-golang.git          d8dec15
+sops                 https://github.com/sylvainmetayer/asdf-sops-evil           b7bb9cd
+direnv               https://github.com/asdf-community/asdf-direnv.git          4de6520

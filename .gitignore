@@ -7,4 +7,3 @@ vendor/
 *.exe
 .idea/
 *.iml
-.envrc

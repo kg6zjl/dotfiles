@@ -2,4 +2,13 @@
 Framework for my basic dev env. Trying to make it darwin and linux friendly!
 
 # setup
-`curl -sL https://raw.githubusercontent.com/kg6zjl/dotfiles/master/setup.sh > ~/setup.sh && bash ~/setup.sh && rm ~/setup.sh`
+```
+# install homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# brew install a few deps
+brew install direnv asdf go-task
+
+# kick off the setup
+task setup
+```

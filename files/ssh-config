@@ -1,9 +1,10 @@
 Host *
    User $USER
-   IdentityFile /Users/$USER/.ssh/id_rsa
+   IdentityFile ${HOME}/.ssh/id_rsa
    StrictHostKeyChecking no
    ForwardAgent yes
    gssapiauthentication no
    UserKnownHostsFile=/dev/null
    TCPKeepAlive yes
    ServerAliveInterval 120
+   AddKeysToAgent yes
