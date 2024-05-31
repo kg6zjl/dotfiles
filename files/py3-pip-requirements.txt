@@ -18,7 +18,7 @@ dacite==1.8.1
 defusedxml==0.7.1
 Deprecated==1.2.14
 exceptiongroup==1.2.0
-fastapi==0.103.2
+fastapi==0.109.1
 filelock==3.13.1
 fsspec==2024.2.0
 ghp-import==2.1.0
