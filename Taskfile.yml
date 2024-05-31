@@ -1,27 +1,33 @@
 version: '3'
 
+env:
+  SSH_KEY: id_rsa
+
 tasks:
-  # setup:
-  #   cmds:
+  setup:
+    deps: [dirs, files, init, brew, asdf, default-venv]
 
   dirs:
     cmds:
-      - mkdir -p ${HOME}/git 
-      - mkdir -p ${HOME}/go
-      - mkdir -p ${HOME}/tmp
       - mkdir -p ${HOME}/.aws
       - mkdir -p ${HOME}/.ssh
+      - mkdir -p ${HOME}/.kube
+      - mkdir -p ${HOME}/git
+      - mkdir -p ${HOME}/go
+      - mkdir -p ${HOME}/bin
+      - mkdir -p ${HOME}/tmp
       - mkdir -p ${HOME}/venvs
 
   # theory: these should use git as the source of truth and distribute the files to your local filesystem
   files:
     deps: [dirs]
     cmds:
-      - cp zprofile ${HOME}/.zprofile
+      - cp files/.zprofile ${HOME}/.zprofile
       - cp asdf-config/.tool-versions ${HOME}/.tool-versions
       - cp asdf-config/.plugin-versions ${HOME}/.plugin-versions
       - cp files/oh-my-posh.omp.json ${HOME}/oh-my-posh.omp.json
       - cp files/vimrc ${HOME}/.vimrc
+      - cp files/.gitconfig ${HOME}/.gitconfig
       - echo "Don't forget to run source ~/.zprofile"
 
   # theory: these are more destructive actions that should only be run to bootstrap your env. please run cp with -n (no clobber)
@@ -30,7 +36,7 @@ tasks:
     cmds:
       - cp -n files/aws-config ${HOME}/.aws/config || echo "File already present"
       - cp -n files/ssh-config ${HOME}/.ssh/config || echo "File already present"
-      - cp .envrc ${HOME}/git/.envrc && cd ../ && direnv allow && cd - && direnv allow
+      - cp -n .envrc ${HOME}/git/.envrc || echo "File already present"
 
   # installs the required plugin for asdf that allows us to manage everything else as a plugin definition
   asdf:
@@ -50,4 +56,31 @@ tasks:
     deps: [dirs]
     cmds:
       - python -m venv ${HOME}/venvs/py3-venv
+      - source ${HOME}/venvs/py3-venv/bin/activate
       - pip install -r files/py3-pip-requirements.txt
+
+  ssh-key:
+    deps: [dirs, files]
+    prompt: This is a dangerous command... Do you want to continue? Backup your old ssh key(s) first.
+    cmds:
+      - chmod 700 $HOME/.ssh
+      - chmod 644 $HOME/.ssh/config || echo "Doesn't exist yet, skipping"
+      - ssh-keygen -t rsa -b 4096 -f $HOME/.ssh/{{ .SSH_KEY }}
+      - chmod 600 $HOME/.ssh/{{ .SSH_KEY }}
+      - ssh-keygen -y -f $HOME/.ssh/{{ .SSH_KEY }} > $HOME/.ssh/{{ .SSH_KEY }}.pub
+      - chmod 644 $HOME/.ssh/{{ .SSH_KEY }}.pub
+    requires:
+      vars: [SSH_KEY]
+
+  brew-pkgs:
+    aliases: [brew]
+    cmds:
+      - for: [act,agg,asciinema,asdf,bash,kubectl,exiftool,ffmpeg,gh,git,git-lfs,grep,glow,gnu-sed,go,go-task,node,npm,gcc,llvm,maven,jsonlint,telnet,helm,helmfile,helmify,jq,k3d,kind,kubernetes-cli,librtlsdr,mcfly,node,podman,proxychains-ng,rustup-init,switch,switcher,tor,tree,x86_64-unknown-linux-gnu,yq,yt-dlp,watch,tmux,]
+        task: brew-install
+        vars:
+          PKG: '{{.ITEM}}'
+
+  brew-install:
+    internal: true
+    cmds:
+      - brew install {{.PKG}}
