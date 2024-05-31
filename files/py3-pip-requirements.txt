@@ -92,3 +92,6 @@ wrapt==1.16.0
 yt-dlp==2023.12.30
 ytmusicapi==1.6.0
 ziglang==0.12.0
+boto
+boto3
+botocore
