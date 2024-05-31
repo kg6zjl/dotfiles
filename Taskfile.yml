@@ -5,13 +5,15 @@ env:
 
 tasks:
   setup:
-    deps: [dirs, files, init, brew, asdf, default-venv]
+    deps: [mac, dirs, files, init, brew, asdf, default-venv]
 
   dirs:
     cmds:
       - mkdir -p ${HOME}/.aws
       - mkdir -p ${HOME}/.ssh
       - mkdir -p ${HOME}/.kube
+      - mkdir -p ${HOME}/.vscode
+      - mkdir -p ${HOME}/.cargo
       - mkdir -p ${HOME}/git
       - mkdir -p ${HOME}/go
       - mkdir -p ${HOME}/bin
@@ -71,6 +73,10 @@ tasks:
       - chmod 644 $HOME/.ssh/{{ .SSH_KEY }}.pub
     requires:
       vars: [SSH_KEY]
+
+  mac:
+    cmds:
+      - xcode-select --install
 
   brew-pkgs:
     aliases: [brew]

@@ -1,4 +1,5 @@
-export PATH="$HOME/.asdf/bin:$HOME/.asdf/shims:${HOME}/bin:${HOME}/go/bin:/opt/homebrew/bin:/opt/homebrew/sbin:${HOME}/Library/Python/3.*/bin:$(/usr/bin/getconf PATH)"
+export PATH="$HOME/.asdf/bin:$HOME/.asdf/shims:${HOME}/bin:${HOME}/go/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:${HOME}/Library/Python/3.*/bin:$(/usr/bin/getconf PATH)"
+
 export HISTCONTROL=ignorespace:ignoredupes:erasedups
 export DIRENV_LOG_FORMAT=
 export BASH_SILENCE_DEPRECATION_WARNING=1
@@ -26,6 +27,7 @@ alias tgplan="rm -rf .terragrunt-cache && terragrunt plan"
 alias tgapply="rm -rf .terragrunt-cache && terragrunt apply"
 alias lg="lazygit"
 alias pd="podman"
+alias vsc="open -n -b com.microsoft.VSCode --args $PWD"
 
 # handle zsh auto-completion
 autoload -Uz compinit
