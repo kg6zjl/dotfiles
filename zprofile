@@ -1,17 +1,28 @@
-alias ll="ls -lah"
-alias icd="cd \`ls -d -1 */ | pick\`"
-alias mkcd="mkdir -p $1; cd $1"
-alias ip="curl -s http://checkip.amazonaws.com"
-
-export PATH="${HOME}/bin:${HOME}/go/bin:${HOME}/Library/Python/3.*/bin:$HOME/.asdf/bin:$HOME/.asdf/shims:${PATH}:$(/usr/bin/getconf PATH)"
+export PATH="$HOME/.asdf/bin:$HOME/.asdf/shims:${HOME}/bin:${HOME}/go/bin:/opt/homebrew/bin:/opt/homebrew/sbin:${HOME}/Library/Python/3.*/bin:$(/usr/bin/getconf PATH)"
 export HISTCONTROL=ignorespace:ignoredupes:erasedups
 export DIRENV_LOG_FORMAT=
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
+alias gs="git status"
+alias ga="git add \$(git status -s | grep '^M\|^??' | awk '{ print $2 }' | pick)"
+alias gd="git rm \$(git status -s | grep '^D' | awk '{ print $2 }' | pick)"
+alias ll="ls -lah"
+alias icd="cd \`ls -d -1 */ | pick\`"
+alias ip="curl -s http://checkip.amazonaws.com"
+
+# set up prompt
 eval "$(oh-my-posh --init --shell zsh --config ${HOME}/oh-my-posh.omp.json)"
 
+# setup home brew
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# setup direnv
 eval "$(direnv hook zsh)"
+
+# setup asdf
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
+# fpath=(${ASDF_DIR}/completions $fpath) # /opt/homebrew/share/zsh/site-functions
+# autoload -Uz compinit && compinit
 
 function git_master_branch() {
     master_branch=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
@@ -62,6 +73,17 @@ function pr() { #get url of repo to start pr process in a browser
     echo "https://$(git ls-remote --get-url | sed 's|ssh:\/\/||g' | sed 's/git@//g' | sed 's/.git//g' | tr ':' '/')/merge_requests/new?merge_request[source_branch]=$branch"
 }
 
-alias gs="git status"
-alias ga="git add \$(git status -s | grep '^M\|^??' | awk '{ print $2 }' | pick)"
-alias gd="git rm \$(git status -s | grep '^D' | awk '{ print $2 }' | pick)"
+function mkcd() {
+    mkdir -p "${1}" && cd "${1}"
+}
+
+function mkvenv() {
+    if [[ ! -z "$1" ]]; then
+        venv_path="${HOME}/venvs/${1}"
+        echo "Making new venv here: ${venv_path}"
+        python -m venv ${venv_path}
+        touch .envrc && echo "\nsource ${venv_path}/bin/activate\n" >> .envrc
+    else
+        echo "Please pass a venv name"
+    fi
+}

@@ -1,12 +1,53 @@
 version: '3'
 
 tasks:
-  setup:
+  # setup:
+  #   cmds:
+
+  dirs:
+    cmds:
+      - mkdir -p ${HOME}/git 
+      - mkdir -p ${HOME}/go
+      - mkdir -p ${HOME}/tmp
+      - mkdir -p ${HOME}/.aws
+      - mkdir -p ${HOME}/.ssh
+      - mkdir -p ${HOME}/venvs
+
+  # theory: these should use git as the source of truth and distribute the files to your local filesystem
+  files:
+    deps: [dirs]
+    cmds:
+      - cp zprofile ${HOME}/.zprofile
+      - cp asdf-config/.tool-versions ${HOME}/.tool-versions
+      - cp asdf-config/.plugin-versions ${HOME}/.plugin-versions
+      - cp files/oh-my-posh.omp.json ${HOME}/oh-my-posh.omp.json
+      - cp files/vimrc ${HOME}/.vimrc
+      - echo "Don't forget to run source ~/.zprofile"
+
+  # theory: these are more destructive actions that should only be run to bootstrap your env. please run cp with -n (no clobber)
+  init:
+    deps: [dirs]
+    cmds:
+      - cp -n files/aws-config ${HOME}/.aws/config || echo "File already present"
+      - cp -n files/ssh-config ${HOME}/.ssh/config || echo "File already present"
+      - cp .envrc ${HOME}/git/.envrc && cd ../ && direnv allow && cd - && direnv allow
+
   # installs the required plugin for asdf that allows us to manage everything else as a plugin definition
+  asdf:
     cmds:
       - asdf plugin add asdf-plugin-manager https://github.com/asdf-community/asdf-plugin-manager.git
       - asdf plugin update asdf-plugin-manager v1.3.1
       - asdf install asdf-plugin-manager 1.3.1 # installs the plugin manager cli
       - asdf global asdf-plugin-manager 1.3.1 # Set a version globally (on your ~/.tool-versions file)
-      - asdf-plugin-manager add-all
-      - asdf install
+      - rm -rf /tmp/asdf-temp && mkdir -p /tmp/asdf-temp # running from a temp dir because asdf plugin manager seems to like a non-git directory to run in
+      - cp -r asdf-config/ /tmp/asdf-temp/
+      - cd /tmp/asdf-temp/ && asdf-plugin-manager add-all
+      - cd /tmp/asdf-temp/ && asdf install
+      - rm -rf /tmp/asdf-temp # clean up our temp dir
+      - asdf direnv setup --shell $SHELL --version latest
+
+  default-venv:
+    deps: [dirs]
+    cmds:
+      - python -m venv ${HOME}/venvs/py3-venv
+      - pip install -r files/py3-pip-requirements.txt
