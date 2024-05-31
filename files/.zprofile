@@ -104,6 +104,7 @@ function mkvenv() {
         echo "Making new venv here: ${venv_path}"
         python -m venv ${venv_path}
         touch .envrc && echo "\nsource ${venv_path}/bin/activate\n" >> .envrc
+        echo "Don't forget to type in direnv allow when prompted"
     else
         echo "Please pass a venv name"
     fi
