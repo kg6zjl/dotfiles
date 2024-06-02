@@ -46,6 +46,7 @@ tasks:
     cmds:
       - asdf plugin add asdf-plugin-manager https://github.com/asdf-community/asdf-plugin-manager.git
       - asdf plugin update asdf-plugin-manager v{{ .ASDF_VERSION }}
+      - asdf plugin-add direnv # direnv plugin via asdf-plugin-manager is broken....
       - asdf install asdf-plugin-manager {{ .ASDF_VERSION }} # installs the plugin manager cli
       - asdf global asdf-plugin-manager {{ .ASDF_VERSION }} # Set a version globally (on your ~/.tool-versions file)
       - rm -rf /tmp/asdf-temp && mkdir -p /tmp/asdf-temp # running from a temp dir because asdf plugin manager seems to like a non-git directory to run in
@@ -53,7 +54,7 @@ tasks:
       - cd /tmp/asdf-temp/ && ${HOME}/.asdf/installs/asdf-plugin-manager/{{ .ASDF_VERSION }}/bin/asdf-plugin-manager add-all
       - cd /tmp/asdf-temp/ && asdf install
       - rm -rf /tmp/asdf-temp # clean up our temp dir
-      - asdf direnv setup --shell $SHELL --version latest
+      - asdf direnv setup --shell $SHELL --version latest || echo "TODO - Ignore error here for now, direnv plugin is broken"
 
   default-venv:
     deps: [dirs]
@@ -79,6 +80,7 @@ tasks:
   mac:
     cmds:
       - xcode-select --install || echo "Already installed"
+      - curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg" && sudo installer -pkg AWSCLIV2.pkg -target / && rm AWSCLIV2.pkg
 
   brew-pkgs:
     aliases: [brew]
