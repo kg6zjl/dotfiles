@@ -1,9 +1,10 @@
-export PATH="$HOME/.asdf/bin:$HOME/.asdf/shims:${HOME}/bin:${HOME}/go/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:${HOME}/Library/Python/3.*/bin:$(/usr/bin/getconf PATH)"
+export PATH="$HOME/.asdf/bin:$HOME/.asdf/shims:${HOME}/bin:${HOME}/go/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:${HOME}/Library/Python/3.*/bin:$(/usr/bin/getconf PATH):/usr/local/bin"
 
 export HISTCONTROL=ignorespace:ignoredupes:erasedups
 export DIRENV_LOG_FORMAT=
 export BASH_SILENCE_DEPRECATION_WARNING=1
 export SHORT_SHELL="$(echo $(basename $SHELL))"
+export TZ_LIST="UTC;US/Pacific;US/Arizona;US/Mountain;US/Central;US/Eastern;Europe/London;Europe/Dublin"
 
 unset KUBECONFIG && export KUBECONFIG=${HOME}/.kube/config
 
@@ -28,6 +29,9 @@ alias tgapply="rm -rf .terragrunt-cache && terragrunt apply"
 alias lg="lazygit"
 alias pd="podman"
 alias vsc="open -n -b com.microsoft.VSCode --args $PWD"
+alias utc="tz -q"
+alias dot="cd ${HOME}/git/dotfiles"
+alias files="cd ${HOME}/git/dotfiles && task files"
 
 # handle zsh auto-completion
 autoload -Uz compinit
@@ -110,6 +114,8 @@ function mkvenv() {
         echo "Making new venv here: ${venv_path}"
         python -m venv ${venv_path}
         touch .envrc && echo "\nsource ${venv_path}/bin/activate\n" >> .envrc
+        source ${venv_path}/bin/activate
+        python -m ensurepip --upgrade
         echo "Don't forget to type in direnv allow when prompted"
     else
         echo "Please pass a venv name"
