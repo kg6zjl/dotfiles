@@ -28,6 +28,7 @@ tasks:
     deps: [dirs]
     cmds:
       - cp files/.zprofile ${HOME}/.zprofile
+      - cp files/.zprofile ${HOME}/.bash_profile
       - cp asdf-config/.tool-versions ${HOME}/.tool-versions
       - cp asdf-config/.plugin-versions ${HOME}/.plugin-versions
       - cp files/oh-my-posh.omp.json ${HOME}/oh-my-posh.omp.json

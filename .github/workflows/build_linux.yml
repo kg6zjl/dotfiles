@@ -25,18 +25,21 @@
           run: |
             test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
             test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-            echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
-            source ~/.bashrc
+            echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bash_profile
+            echo "export PATH=$HOME/.asdf/bin:$HOME/.asdf/shims:${HOME}/bin:${HOME}/go/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/home/linuxbrew/.linuxbrew/bin:${HOME}/Library/Python/3.*/bin:$(/usr/bin/getconf PATH):/usr/local/bin:${PATH}" >> ~/.bash_profile
+            echo -e "\n. \"$(brew --prefix asdf)/libexec/asdf.sh\"" >> ~/.bash_profile
+            echo -e "\n. \"$(brew --prefix asdf)/etc/bash_completion.d/asdf.bash\"" >> ~/.bash_profile
+            source ~/.bash_profile
 
         - name: Install Deps
           run: /home/linuxbrew/.linuxbrew/bin/brew install direnv asdf go-task yamllint
 
         - name: Lint
-          run: yamllint --no-warnings *.yml
+          run: /home/linuxbrew/.linuxbrew/bin/yamllint --no-warnings *.yml
         
         - name: Generate New SSH-Key
-          run: task ssh-key --dry --yes
+          run: /home/linuxbrew/.linuxbrew/bin/task ssh-key --dry --yes
         
         - name: Run Setup
-          run: task setup
+          run: source ~/.bash_profile && /home/linuxbrew/.linuxbrew/bin/task setup
     

@@ -35,8 +35,8 @@ alias dot="cd ${HOME}/git/dotfiles"
 alias files="cd ${HOME}/git/dotfiles && task files && source ~/.zprofile"
 
 # handle zsh auto-completion
-autoload -Uz compinit
-compinit
+autoload -Uz compinit || echo "This might fail in bash"
+compinit || echo "This might fail in bash"
 
 # set up prompt
 eval "$(oh-my-posh --init --shell ${SHORT_SHELL} --config ${HOME}/oh-my-posh.omp.json)"
@@ -139,3 +139,14 @@ function rebase() {
     git pull
     git stash pop
 }
+
+# Mac overrides/add-ons
+if [[ "$OSTYPE" == *"darwin"* ]]; then
+    # use gnu sed on mac
+    alias sed=gsed
+
+    function code() { #open dir or file in VS Code (osx only), WSL does this natively
+        VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*
+    }
+fi
+
