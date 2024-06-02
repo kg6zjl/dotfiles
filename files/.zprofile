@@ -28,6 +28,7 @@ alias tgplan="rm -rf .terragrunt-cache && terragrunt plan"
 alias tgapply="rm -rf .terragrunt-cache && terragrunt apply"
 alias lg="lazygit"
 alias pd="podman"
+alias docker="podman" # disable/remove this if using docker
 alias vsc="open -n -b com.microsoft.VSCode --args $PWD"
 alias utc="tz -q"
 alias dot="cd ${HOME}/git/dotfiles"
