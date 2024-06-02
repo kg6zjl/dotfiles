@@ -1,0 +1,29 @@
+---
+    name: Linux Build
+    
+    on:
+      pull_request:
+        types: [opened, synchronize] # run when MR is opened and updated
+        branches:
+            - master
+    
+    jobs:
+      build:
+        runs-on: ubuntu-latest
+    
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+    
+        - name: Install Brew
+          run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        
+        - name: Install Deps
+          run: brew install direnv asdf go-task
+        
+        - name: Generate New SSH-Key
+          run: task ssh-key --dry --yes
+        
+        - name: Run Setup
+          run: task setup
+    
