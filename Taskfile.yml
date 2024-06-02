@@ -1,3 +1,4 @@
+---
 version: '3'
 
 env:
@@ -21,7 +22,8 @@ tasks:
       - mkdir -p ${HOME}/tmp
       - mkdir -p ${HOME}/venvs
 
-  # theory: these should use git as the source of truth and distribute the files to your local filesystem
+  # theory: these should use git as the source of truth
+  # and distribute the files to your local filesystem
   files:
     deps: [dirs]
     cmds:
@@ -33,7 +35,8 @@ tasks:
       - cp files/.gitconfig ${HOME}/.gitconfig
       - echo "Don't forget to run source ~/.zprofile"
 
-  # theory: these are more destructive actions that should only be run to bootstrap your env. please run cp with -n (no clobber)
+  # theory: these are more destructive actions that should
+  # only be run to bootstrap your env. please run cp with -n (no clobber)
   init:
     deps: [dirs]
     cmds:
@@ -41,7 +44,8 @@ tasks:
       - cp -n files/ssh-config ${HOME}/.ssh/config || echo "File already present"
       - cp -n .envrc ${HOME}/git/.envrc || echo "File already present"
 
-  # installs the required plugin for asdf that allows us to manage everything else as a plugin definition
+  # installs the required plugin for asdf that allows
+  # us to manage everything else as a plugin definition
   asdf:
     cmds:
       - asdf plugin add asdf-plugin-manager https://github.com/asdf-community/asdf-plugin-manager.git
@@ -86,7 +90,14 @@ tasks:
   brew-pkgs:
     aliases: [brew]
     cmds:
-      - for: [warrensbox/tap/tfswitch,warrensbox/tap/tgswitch,tz,act,agg,asciinema,asdf,bash,kubectl,exiftool,ffmpeg,gh,git,git-lfs,grep,glow,gnu-sed,go,go-task,node,npm,gcc,llvm,maven,jsonlint,telnet,helm,helmfile,helmify,jq,k3d,kind,kubernetes-cli,librtlsdr,mcfly,node,podman,proxychains-ng,rustup-init,switch,tor,tree,yq,yt-dlp,watch,tmux,]
+      - for: [
+        warrensbox/tap/tfswitch, warrensbox/tap/tgswitch, tz, act, agg,
+        asciinema, asdf, bash, kubectl, exiftool, ffmpeg, gh, git, git-lfs,
+        grep, glow, gnu-sed, go, go-task, node, npm, gcc, llvm, maven,
+        jsonlint, telnet, helm, helmfile, helmify, jq, k3d, kind,
+        kubernetes-cli, librtlsdr, mcfly, node, podman, proxychains-ng,
+        rustup-init, switch, tor, tree, yq, yt-dlp, watch, tmux, yamllint
+      ]
         task: brew-install
         vars:
           PKG: '{{.ITEM}}'
@@ -98,7 +109,8 @@ tasks:
 
   mac-brew-pkgs:
     platform: [darwin]
-    for: [sergiobenitez/osxct/x86_64-unknown-linux-gnu]
-      task: brew-install
+    cmds:
+      - for: [sergiobenitez/osxct/x86_64-unknown-linux-gnu]
+        task: brew-install
         vars:
           PKG: '{{.ITEM}}'

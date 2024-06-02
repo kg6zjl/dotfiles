@@ -19,7 +19,10 @@ jobs:
       run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     
     - name: Install Deps
-      run: brew install direnv asdf go-task
+      run: brew install direnv asdf go-task yamllint
+
+    - name: Lint
+      run: yamllint --no-warnings *.yml
     
     - name: Generate New SSH-Key
       run: task ssh-key --dry --yes
