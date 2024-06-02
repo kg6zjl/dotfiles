@@ -16,7 +16,7 @@
           uses: actions/checkout@v2
         
         - name: Install Deps
-          run: apt update && apt install -y curl git jq
+          run: apt-get update || echo "ignore errors" && apt-get -y install curl git jq
     
         - name: Install Brew
           run: /bin/bash -c "NONINTERACTIVE=1 $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
