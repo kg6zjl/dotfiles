@@ -2,6 +2,7 @@ version: '3'
 
 env:
   SSH_KEY: id_rsa
+  ASDF_VERSION: 1.3.1
 
 tasks:
   setup:
@@ -44,12 +45,12 @@ tasks:
   asdf:
     cmds:
       - asdf plugin add asdf-plugin-manager https://github.com/asdf-community/asdf-plugin-manager.git
-      - asdf plugin update asdf-plugin-manager v1.3.1
-      - asdf install asdf-plugin-manager 1.3.1 # installs the plugin manager cli
-      - asdf global asdf-plugin-manager 1.3.1 # Set a version globally (on your ~/.tool-versions file)
+      - asdf plugin update asdf-plugin-manager v{{ .ASDF_VERSION }}
+      - asdf install asdf-plugin-manager {{ .ASDF_VERSION }} # installs the plugin manager cli
+      - asdf global asdf-plugin-manager {{ .ASDF_VERSION }} # Set a version globally (on your ~/.tool-versions file)
       - rm -rf /tmp/asdf-temp && mkdir -p /tmp/asdf-temp # running from a temp dir because asdf plugin manager seems to like a non-git directory to run in
       - cp -r asdf-config/ /tmp/asdf-temp/
-      - cd /tmp/asdf-temp/ && asdf-plugin-manager add-all
+      - cd /tmp/asdf-temp/ && ${HOME}/.asdf/installs/asdf-plugin-manager/{{ .ASDF_VERSION }}/bin/asdf-plugin-manager add-all
       - cd /tmp/asdf-temp/ && asdf install
       - rm -rf /tmp/asdf-temp # clean up our temp dir
       - asdf direnv setup --shell $SHELL --version latest
