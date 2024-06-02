@@ -5,4 +5,5 @@ rust                 https://github.com/code-lever/asdf-rust.git                
 terraform            https://github.com/asdf-community/asdf-hashicorp.git       c048526
 golang               https://github.com/asdf-community/asdf-golang.git          d8dec15
 sops                 https://github.com/sylvainmetayer/asdf-sops-evil           b7bb9cd
-direnv               https://github.com/asdf-community/asdf-direnv.git          4de6520
+python               https://github.com/danhper/asdf-python.git                 5e277e2
+

@@ -1,5 +1,5 @@
 asdf-plugin-manager     1.3.1
 python                  latest 3.12.3 system
 awscli                  latest
-direnv                  latest
 terraform               latest
+direnv                  latest
