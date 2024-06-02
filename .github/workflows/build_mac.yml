@@ -22,11 +22,7 @@ jobs:
       run: brew install direnv asdf go-task
     
     - name: Generate New SSH-Key
-      run: task ssh-key
+      run: task ssh-key --yes
     
     - name: Run Setup
       run: task setup
-
-    - name: Fail on error
-      run: exit 1
-      if: ${{ failure() }}
