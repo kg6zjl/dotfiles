@@ -1,4 +1,4 @@
-export PATH="$HOME/.asdf/bin:$HOME/.asdf/shims:${HOME}/bin:${HOME}/go/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:${HOME}/Library/Python/3.*/bin:$(/usr/bin/getconf PATH):/usr/local/bin"
+export PATH="$HOME/.asdf/bin:$HOME/.asdf/shims:${HOME}/bin:${HOME}/go/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/home/linuxbrew/.linuxbrew/bin:${HOME}/Library/Python/3.*/bin:$(/usr/bin/getconf PATH):/usr/local/bin"
 
 export HISTCONTROL=ignorespace:ignoredupes:erasedups
 export DIRENV_LOG_FORMAT=

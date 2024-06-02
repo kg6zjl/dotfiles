@@ -14,15 +14,19 @@
         steps:
         - name: Checkout code
           uses: actions/checkout@v2
+        
+        - name: Install Deps
+          run: apt update && apt install -y curl git jq
     
         - name: Install Brew
-          run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          run: /bin/bash -c "NONINTERACTIVE=1 $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         
         - name: Fix Brew Path
           run: |
             test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
             test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
             echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
+            source ~/.bashrc
 
         - name: Install Deps
           run: brew install direnv asdf go-task yamllint
