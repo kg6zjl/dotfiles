@@ -29,7 +29,7 @@
             source ~/.bashrc
 
         - name: Install Deps
-          run: brew install direnv asdf go-task yamllint
+          run: /home/linuxbrew/.linuxbrew/bin/brew install direnv asdf go-task yamllint
 
         - name: Lint
           run: yamllint --no-warnings *.yml
