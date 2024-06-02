@@ -129,3 +129,12 @@ function notes() {
     ln -sf ${HOME}/notes/${current_date}.md ${HOME}/notes/_notes.md
     code ${HOME}/notes/
 }
+
+function rebase() {
+    git_master_branch
+    git stash
+    git fetch origin
+    git rebase origin/${master_branch}
+    git pull
+    git stash pop
+}
