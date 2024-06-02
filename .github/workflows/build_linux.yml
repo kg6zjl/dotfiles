@@ -26,7 +26,7 @@
             test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
             test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
             echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
-            echo 
+            echo "export PATH=$HOME/.asdf/bin:$HOME/.asdf/shims:${HOME}/bin:${HOME}/go/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/home/linuxbrew/.linuxbrew/bin:${HOME}/Library/Python/3.*/bin:$(/usr/bin/getconf PATH):/usr/local/bin:${PATH}" >> ~/.bashrc
             source ~/.bashrc
 
         - name: Install Deps
@@ -39,5 +39,5 @@
           run: /home/linuxbrew/.linuxbrew/bin/task ssh-key --dry --yes
         
         - name: Run Setup
-          run: /home/linuxbrew/.linuxbrew/bin/task setup
+          run: source ~/.bashrc && /home/linuxbrew/.linuxbrew/bin/task setup
     
