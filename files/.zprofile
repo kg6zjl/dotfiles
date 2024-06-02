@@ -139,3 +139,14 @@ function rebase() {
     git pull
     git stash pop
 }
+
+# Mac overrides/add-ons
+if [[ "$OSTYPE" == *"darwin"* ]]; then
+    # use gnu sed on mac
+    alias sed=gsed
+
+    function code() { #open dir or file in VS Code (osx only), WSL does this natively
+        VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $*
+    }
+fi
+
