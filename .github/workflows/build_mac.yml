@@ -1,5 +1,5 @@
 ---
-name: Build from dotfiles config
+name: Mac Build
 
 on:
   pull_request:
