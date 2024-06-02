@@ -35,8 +35,8 @@ alias dot="cd ${HOME}/git/dotfiles"
 alias files="cd ${HOME}/git/dotfiles && task files && source ~/.zprofile"
 
 # handle zsh auto-completion
-autoload -Uz compinit
-compinit
+autoload -Uz compinit || echo "This might fail in bash"
+compinit || echo "This might fail in bash"
 
 # set up prompt
 eval "$(oh-my-posh --init --shell ${SHORT_SHELL} --config ${HOME}/oh-my-posh.omp.json)"
