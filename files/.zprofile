@@ -123,9 +123,9 @@ function mkvenv() {
 }
 
 function notes() {
-  mkdir -p ${HOME}/notes
-  current_date=$(date +"%Y-%m-%d")
-  touch ${HOME}/notes/${current_date}.md
-  ln -sf ${HOME}/notes/${current_date}.md ${HOME}/notes/_notes.md
-  code ${HOME}/notes/
+    mkdir -p ${HOME}/notes
+    current_date=$(date +"%Y-%m-%d")
+    touch ${HOME}/notes/${current_date}.md
+    ln -sf ${HOME}/notes/${current_date}.md ${HOME}/notes/_notes.md
+    code ${HOME}/notes/
 }

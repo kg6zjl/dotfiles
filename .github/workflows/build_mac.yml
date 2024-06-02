@@ -5,7 +5,7 @@ on:
   pull_request:
     types: [opened, synchronize] # run when MR is opened and updated
     branches:
-        - main
+        - master
 
 jobs:
   build:
