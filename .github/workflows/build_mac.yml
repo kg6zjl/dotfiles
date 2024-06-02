@@ -1,0 +1,32 @@
+---
+name: Build from dotfiles config
+
+on:
+  pull_request:
+    types: [opened, synchronize] # run when MR is opened and updated
+    branches:
+        - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Brew
+      run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    
+    - name: Install Deps
+      run: brew install direnv asdf go-task
+    
+    - name: Generate New SSH-Key
+      run: task ssh-key
+    
+    - name: Run Setup
+      run: task setup
+
+    - name: Fail on error
+      run: exit 1
+      if: ${{ failure() }}
