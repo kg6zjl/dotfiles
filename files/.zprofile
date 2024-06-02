@@ -123,9 +123,18 @@ function mkvenv() {
 }
 
 function notes() {
-  mkdir -p ${HOME}/notes
-  current_date=$(date +"%Y-%m-%d")
-  touch ${HOME}/notes/${current_date}.md
-  ln -sf ${HOME}/notes/${current_date}.md ${HOME}/notes/_notes.md
-  code ${HOME}/notes/
+    mkdir -p ${HOME}/notes
+    current_date=$(date +"%Y-%m-%d")
+    touch ${HOME}/notes/${current_date}.md
+    ln -sf ${HOME}/notes/${current_date}.md ${HOME}/notes/_notes.md
+    code ${HOME}/notes/
+}
+
+function rebase() {
+    git_master_branch
+    git stash
+    git fetch origin
+    git rebase origin/${master_branch}
+    git pull
+    git stash pop
 }
