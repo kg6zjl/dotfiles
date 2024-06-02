@@ -31,7 +31,7 @@ alias pd="podman"
 alias vsc="open -n -b com.microsoft.VSCode --args $PWD"
 alias utc="tz -q"
 alias dot="cd ${HOME}/git/dotfiles"
-alias files="cd ${HOME}/git/dotfiles && task files"
+alias files="cd ${HOME}/git/dotfiles && task files && source ~/.zprofile"
 
 # handle zsh auto-completion
 autoload -Uz compinit
@@ -120,4 +120,12 @@ function mkvenv() {
     else
         echo "Please pass a venv name"
     fi
+}
+
+function notes() {
+  mkdir -p ${HOME}/notes
+  current_date=$(date +"%Y-%m-%d")
+  touch ${HOME}/notes/${current_date}.md
+  ln -sf ${HOME}/notes/${current_date}.md ${HOME}/notes/_notes.md
+  code ${HOME}/notes/
 }
