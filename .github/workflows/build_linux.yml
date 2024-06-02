@@ -18,8 +18,17 @@
         - name: Install Brew
           run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         
+        - name: Fix Brew Path
+          run: |
+            test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+            test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+            echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
+
         - name: Install Deps
-          run: brew install direnv asdf go-task
+          run: brew install direnv asdf go-task yamllint
+
+        - name: Lint
+          run: yamllint --no-warnings *.yml
         
         - name: Generate New SSH-Key
           run: task ssh-key --dry --yes
