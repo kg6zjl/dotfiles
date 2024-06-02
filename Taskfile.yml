@@ -6,7 +6,7 @@ env:
 
 tasks:
   setup:
-    deps: [mac, dirs, files, init, brew, asdf, default-venv]
+    deps: [mac, dirs, files, init, brew, asdf, default-venv, mac-brew-pkgs]
 
   dirs:
     cmds:
@@ -78,6 +78,7 @@ tasks:
       vars: [SSH_KEY]
 
   mac:
+    platforms: [darwin]
     cmds:
       - xcode-select --install || echo "Already installed"
       - curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg" && sudo installer -pkg AWSCLIV2.pkg -target / && rm AWSCLIV2.pkg
@@ -85,7 +86,7 @@ tasks:
   brew-pkgs:
     aliases: [brew]
     cmds:
-      - for: [warrensbox/tap/tfswitch,warrensbox/tap/tgswitch,tz,act,agg,asciinema,asdf,bash,kubectl,exiftool,ffmpeg,gh,git,git-lfs,grep,glow,gnu-sed,go,go-task,node,npm,gcc,llvm,maven,jsonlint,telnet,helm,helmfile,helmify,jq,k3d,kind,kubernetes-cli,librtlsdr,mcfly,node,podman,proxychains-ng,rustup-init,switch,tor,tree,x86_64-unknown-linux-gnu,yq,yt-dlp,watch,tmux,]
+      - for: [warrensbox/tap/tfswitch,warrensbox/tap/tgswitch,tz,act,agg,asciinema,asdf,bash,kubectl,exiftool,ffmpeg,gh,git,git-lfs,grep,glow,gnu-sed,go,go-task,node,npm,gcc,llvm,maven,jsonlint,telnet,helm,helmfile,helmify,jq,k3d,kind,kubernetes-cli,librtlsdr,mcfly,node,podman,proxychains-ng,rustup-init,switch,tor,tree,yq,yt-dlp,watch,tmux,]
         task: brew-install
         vars:
           PKG: '{{.ITEM}}'
@@ -94,3 +95,10 @@ tasks:
     internal: true
     cmds:
       - brew install {{.PKG}}
+
+  mac-brew-pkgs:
+    platform: [darwin]
+    for: [sergiobenitez/osxct/x86_64-unknown-linux-gnu]
+      task: brew-install
+        vars:
+          PKG: '{{.ITEM}}'
