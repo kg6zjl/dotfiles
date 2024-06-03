@@ -26,7 +26,9 @@
             test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
             test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
             echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bash_profile
-            echo "export PATH=$HOME/.asdf/bin:$HOME/.asdf/shims:${HOME}/bin:${HOME}/go/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/home/linuxbrew/.linuxbrew/bin:${HOME}/Library/Python/3.*/bin:$(/usr/bin/getconf PATH):/usr/local/bin:${PATH}" >> ~/.bash_profile
+            echo "" >> ~/.bash_profile
+            echo "export PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/opt:$HOME/.asdf/bin:$HOME/.asdf/shims:${HOME}/bin:${HOME}/go/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/home/linuxbrew/.linuxbrew/bin:${HOME}/Library/Python/3.*/bin:$(/usr/bin/getconf PATH):/usr/local/bin:${PATH}" >> ~/.bash_profile
+            source ~/.bash_profile
             echo -e "\n. \"$(brew --prefix asdf)/libexec/asdf.sh\"" >> ~/.bash_profile
             echo -e "\n. \"$(brew --prefix asdf)/etc/bash_completion.d/asdf.bash\"" >> ~/.bash_profile
             source ~/.bash_profile
