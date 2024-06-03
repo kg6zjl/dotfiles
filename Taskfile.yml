@@ -99,7 +99,7 @@ tasks:
         kubernetes-cli, librtlsdr, mcfly, node, podman, proxychains-ng,
         rustup-init, switch, tor, tree, yq, yt-dlp, watch, tmux, yamllint,
         pwgen, azure-cli, glab, gawk, k3d, k9s, lazygit, mkcert, openssh,
-        opentofu, sops, skaffold, kubelogin
+        opentofu, sops, skaffold
       ]
         task: brew-install
         vars:
