@@ -66,7 +66,7 @@ tasks:
     cmds:
       - python -m venv ${HOME}/venvs/py3-venv
       - source ${HOME}/venvs/py3-venv/bin/activate
-      - python -m ensurepip --upgrade
+      - python -m ensurepip --upgrade || echo "Ignore errors"
       - pip install -r files/py3-pip-requirements.txt
 
   ssh-key:
