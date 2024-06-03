@@ -1,13 +1,14 @@
+# set common env vars
 export PATH="$HOME/.asdf/bin:$HOME/.asdf/shims:${HOME}/bin:${HOME}/go/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/home/linuxbrew/.linuxbrew/bin:${HOME}/Library/Python/3.*/bin:$(/usr/bin/getconf PATH):/usr/local/bin"
-
 export HISTCONTROL=ignorespace:ignoredupes:erasedups
 export DIRENV_LOG_FORMAT=
 export BASH_SILENCE_DEPRECATION_WARNING=1
 export SHORT_SHELL="$(echo $(basename $SHELL))"
 export TZ_LIST="UTC;US/Pacific;US/Arizona;US/Mountain;US/Central;US/Eastern;Europe/London;Europe/Dublin"
+export GOPATH="${HOME}/go"
+export VIRTUAL_ENV_DISABLE_PROMPT=1 # Venv name is handled by oh-my-posh prompt config
 
-unset KUBECONFIG && export KUBECONFIG=${HOME}/.kube/config
-
+# set my favorite shortcuts
 alias gs="git status"
 alias ga="git add \$(git status -s | grep '^M\|^??' | awk '{ print $2 }' | pick)"
 alias gd="git rm \$(git status -s | grep '^D' | awk '{ print $2 }' | pick)"
@@ -55,6 +56,13 @@ eval "$(direnv hook ${SHORT_SHELL})"
 
 # setup switcher
 source <(switcher init ${SHORT_SHELL})
+
+# setup KUBECONFIG env var for any individual config files
+unset KUBECONFIG && export KUBECONFIG=${HOME}/.kube/config
+for config in $(grep -irl 'kind: Config' ${HOME}/.kube | sort | uniq);
+do
+    export KUBECONFIG=${KUBECONFIG}:${config}
+done
 
 function git_master_branch() {
     master_branch=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
@@ -117,18 +125,22 @@ function mkvenv() {
         touch .envrc && echo "\nsource ${venv_path}/bin/activate\n" >> .envrc
         source ${venv_path}/bin/activate
         python -m ensurepip --upgrade
-        echo "Don't forget to type in direnv allow when prompted"
+        echo "Don't forget to type in 'direnv allow' when prompted"
     else
         echo "Please pass a venv name"
     fi
 }
 
 function notes() {
-    mkdir -p ${HOME}/notes
-    current_date=$(date +"%Y-%m-%d")
-    touch ${HOME}/notes/${current_date}.md
-    ln -sf ${HOME}/notes/${current_date}.md ${HOME}/notes/_notes.md
-    code ${HOME}/notes/
+    CURRENT_DATE=$(date +"%Y-%m-%d")
+    YY=$(date +"%Y")
+    MM=$(date +"%m")
+    BASE_NOTES_DIR=${HOME}/notes
+    CURRENT_NOTES_DIR=${BASE_NOTES_DIR}/${YY}/${MM}
+    mkdir -p ${CURRENT_NOTES_DIR}
+    touch ${CURRENT_NOTES_DIR}/${CURRENT_DATE}.md
+    ln -sf ${CURRENT_NOTES_DIR}/${CURRENT_DATE}.md ${BASE_NOTES_DIR}/_notes.md
+    code ${BASE_NOTES_DIR}/ ${BASE_NOTES_DIR}/_notes.md
 }
 
 function rebase() {
@@ -150,3 +162,10 @@ if [[ "$OSTYPE" == *"darwin"* ]]; then
     }
 fi
 
+function pass() { #generate a unique password of n length, ie: pass 16
+    if [[ "$OSTYPE" == *"darwin"* ]]; then
+        eval pwgen -Bs $1 1 | tr -d '\n' | pbcopy;
+    else
+        eval pwgen -Bs $1 1 | tr -d '\n';
+    fi
+}
