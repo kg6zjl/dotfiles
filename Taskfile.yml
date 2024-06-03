@@ -27,14 +27,14 @@ tasks:
   files:
     deps: [dirs]
     cmds:
-      - cp files/.zprofile ${HOME}/.zprofile
-      - cp files/.zprofile ${HOME}/.bash_profile
+      - cp files/dotprofile ${HOME}/.zprofile
+      - cp files/dotprofile ${HOME}/.bash_profile
       - cp asdf-config/.tool-versions ${HOME}/.tool-versions
       - cp asdf-config/.plugin-versions ${HOME}/.plugin-versions
       - cp files/oh-my-posh.omp.json ${HOME}/oh-my-posh.omp.json
       - cp files/vimrc ${HOME}/.vimrc
       - cp files/.gitconfig ${HOME}/.gitconfig
-      - echo "Don't forget to run source ~/.zprofile"
+      - echo "Don't forget to run source ~/.zprofile or source ~/.bash_profile"
 
   # theory: these are more destructive actions that should
   # only be run to bootstrap your env. please run cp with -n (no clobber)
@@ -97,7 +97,9 @@ tasks:
         grep, glow, gnu-sed, go, go-task, node, npm, gcc, llvm, maven,
         jsonlint, telnet, helm, helmfile, helmify, jq, k3d, kind,
         kubernetes-cli, librtlsdr, mcfly, node, podman, proxychains-ng,
-        rustup-init, switch, tor, tree, yq, yt-dlp, watch, tmux, yamllint
+        rustup-init, switch, tor, tree, yq, yt-dlp, watch, tmux, yamllint,
+        pwgen, azure-cli, glab, gawk, k3d, k9s, lazygit, mkcert, openssh,
+        opentofu, sops, skaffold, kubelogin
       ]
         task: brew-install
         vars:
