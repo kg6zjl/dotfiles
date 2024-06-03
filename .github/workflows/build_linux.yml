@@ -46,5 +46,5 @@
           run: /home/linuxbrew/.linuxbrew/bin/task ssh-key --dry --yes
         
         - name: Run Setup
-          run: source ~/.bashrc && /home/linuxbrew/.linuxbrew/bin/task setup
+          run: echo $PATH && alias asdf="/home/linuxbrew/.linuxbrew/bin/asdf" && /home/linuxbrew/.linuxbrew/bin/task setup
     
