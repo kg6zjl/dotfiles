@@ -46,5 +46,5 @@
           run: /home/linuxbrew/.linuxbrew/bin/task ssh-key --dry --yes
         
         - name: Run Setup
-          run: export PATH="/home/linuxbrew/.linuxbrew/bin:${PATH}" && /home/linuxbrew/.linuxbrew/bin/task setup
+          run: export PATH="/home/linuxbrew/.linuxbrew/bin:${HOME}/.asdf/plugins:${HOME}/.asdf/shims:${PATH}" && /home/linuxbrew/.linuxbrew/bin/task setup
     
