@@ -55,7 +55,7 @@ tasks:
       - asdf install asdf-plugin-manager {{ .ASDF_VERSION }} # installs the plugin manager cli
       - asdf global asdf-plugin-manager {{ .ASDF_VERSION }} # Set a version globally (on your ~/.tool-versions file)
       - rm -rf /tmp/asdf-temp && mkdir -p /tmp/asdf-temp # running from a temp dir because asdf plugin manager seems to like a non-git directory to run in
-      - cp -r asdf-config/ /tmp/asdf-temp/
+      - cp -r asdf-config/.*-versions /tmp/asdf-temp/
       - cd /tmp/asdf-temp/ && ${HOME}/.asdf/installs/asdf-plugin-manager/{{ .ASDF_VERSION }}/bin/asdf-plugin-manager add-all
       - cd /tmp/asdf-temp/ && asdf install
       - rm -rf /tmp/asdf-temp # clean up our temp dir
