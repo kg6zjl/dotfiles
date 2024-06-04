@@ -12,6 +12,7 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1 # Venv name is handled by oh-my-posh prompt 
 alias gs="git status"
 alias ga="git add \`git status -s --porcelain | pick -c 2\`" # git add (prompt for file)
 alias gd="git rm \`git status -s | grep '^D' | pick -c 2\`" # git delete (prompt for file)
+alias gcb="git checkout \`git branch | tr -d '* ' | pick\`" # git change branch (prompt for branch)
 alias ll="ls -lah"
 alias icd="cd \`ls -d -1 */ | pick\`" # interactive cd
 alias ip="curl -s http://checkip.amazonaws.com"
