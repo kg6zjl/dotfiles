@@ -10,10 +10,10 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1 # Venv name is handled by oh-my-posh prompt 
 
 # set my favorite shortcuts
 alias gs="git status"
-alias ga="git add \$(git status -s | grep '^M\|^??' | awk '{ print $2 }' | pick)"
-alias gd="git rm \$(git status -s | grep '^D' | awk '{ print $2 }' | pick)"
+alias ga="git add \`git status -s --porcelain | pick -c 2\`" # git add (prompt for file)
+alias gd="git rm \`git status -s | grep '^D' | pick -c 2\`" # git delete (prompt for file)
 alias ll="ls -lah"
-alias icd="cd \`ls -d -1 */ | pick\`"
+alias icd="cd \`ls -d -1 */ | pick\`" # interactive cd
 alias ip="curl -s http://checkip.amazonaws.com"
 alias tf="terraform"
 alias tg="terragrunt"
