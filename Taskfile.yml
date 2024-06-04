@@ -111,7 +111,7 @@ tasks:
       - brew install {{.PKG}}
 
   mac-brew-pkgs:
-    platform: [darwin]
+    platforms: [darwin]
     cmds:
       - for: [sergiobenitez/osxct/x86_64-unknown-linux-gnu, telnet]
         task: brew-install
