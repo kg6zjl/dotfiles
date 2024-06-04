@@ -55,7 +55,7 @@ tasks:
       - asdf install asdf-plugin-manager {{ .ASDF_VERSION }} # installs the plugin manager cli
       - asdf global asdf-plugin-manager {{ .ASDF_VERSION }} # Set a version globally (on your ~/.tool-versions file)
       - rm -rf /tmp/asdf-temp && mkdir -p /tmp/asdf-temp # running from a temp dir because asdf plugin manager seems to like a non-git directory to run in
-      - cp -r asdf-config/ /tmp/asdf-temp/
+      - cp -r asdf-config/.*-versions /tmp/asdf-temp/
       - cd /tmp/asdf-temp/ && ${HOME}/.asdf/installs/asdf-plugin-manager/{{ .ASDF_VERSION }}/bin/asdf-plugin-manager add-all
       - cd /tmp/asdf-temp/ && asdf install
       - rm -rf /tmp/asdf-temp # clean up our temp dir
@@ -66,7 +66,7 @@ tasks:
     cmds:
       - python -m venv ${HOME}/venvs/py3-venv
       - source ${HOME}/venvs/py3-venv/bin/activate
-      - python -m ensurepip --upgrade
+      - python -m ensurepip --upgrade || echo "Ignore errors"
       - pip install -r files/py3-pip-requirements.txt
 
   ssh-key:
@@ -95,7 +95,7 @@ tasks:
         warrensbox/tap/tfswitch, warrensbox/tap/tgswitch, tz, act, agg,
         asciinema, asdf, bash, kubectl, exiftool, ffmpeg, gh, git, git-lfs,
         grep, glow, gnu-sed, go, go-task, node, npm, gcc, llvm, maven,
-        jsonlint, telnet, helm, helmfile, helmify, jq, k3d, kind,
+        jsonlint, helm, helmfile, helmify, jq, k3d, kind,
         kubernetes-cli, librtlsdr, mcfly, node, podman, proxychains-ng,
         rustup-init, switch, tor, tree, yq, yt-dlp, watch, tmux, yamllint,
         pwgen, azure-cli, glab, gawk, k3d, k9s, lazygit, mkcert, openssh,
@@ -113,7 +113,7 @@ tasks:
   mac-brew-pkgs:
     platform: [darwin]
     cmds:
-      - for: [sergiobenitez/osxct/x86_64-unknown-linux-gnu]
+      - for: [sergiobenitez/osxct/x86_64-unknown-linux-gnu, telnet]
         task: brew-install
         vars:
           PKG: '{{.ITEM}}'
