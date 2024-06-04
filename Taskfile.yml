@@ -97,7 +97,7 @@ tasks:
         grep, glow, gnu-sed, go, go-task, node, npm, gcc, llvm, maven,
         jsonlint, helm, helmfile, helmify, jq, k3d, kind,
         kubernetes-cli, librtlsdr, mcfly, node, podman, proxychains-ng,
-        rustup-init, switch, tor, tree, yq, yt-dlp, watch, tmux, yamllint,
+        rustup-init, danielfoehrkn/switch/switch, tor, tree, yq, yt-dlp, watch, tmux, yamllint,
         pwgen, azure-cli, glab, gawk, k3d, k9s, lazygit, mkcert, openssh,
         opentofu, sops, skaffold
       ]
