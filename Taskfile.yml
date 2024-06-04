@@ -95,7 +95,7 @@ tasks:
         warrensbox/tap/tfswitch, warrensbox/tap/tgswitch, tz, act, agg,
         asciinema, asdf, bash, kubectl, exiftool, ffmpeg, gh, git, git-lfs,
         grep, glow, gnu-sed, go, go-task, node, npm, gcc, llvm, maven,
-        jsonlint, telnet, helm, helmfile, helmify, jq, k3d, kind,
+        jsonlint, helm, helmfile, helmify, jq, k3d, kind,
         kubernetes-cli, librtlsdr, mcfly, node, podman, proxychains-ng,
         rustup-init, switch, tor, tree, yq, yt-dlp, watch, tmux, yamllint,
         pwgen, azure-cli, glab, gawk, k3d, k9s, lazygit, mkcert, openssh,
