@@ -119,6 +119,7 @@ tasks:
           PKG: '{{.ITEM}}'
 
   vlang:
+    deps: [dirs]
     cmds:
       - cd ${HOME}/git && git clone https://github.com/vlang/v || echo "Skip if already cloned"
       - cd ${HOME}/git/v && make
