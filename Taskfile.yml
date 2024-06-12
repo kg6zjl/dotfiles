@@ -7,7 +7,7 @@ env:
 
 tasks:
   setup:
-    deps: [mac, dirs, files, init, brew, asdf, default-venv, mac-brew-pkgs, vlang]
+    deps: [lint, mac, dirs, files, init, brew, asdf, default-venv, mac-brew-pkgs, vlang]
 
   dirs:
     cmds:
