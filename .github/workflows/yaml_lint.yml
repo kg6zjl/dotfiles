@@ -1,0 +1,17 @@
+---
+name: YAML Lint
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  yaml-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Run yamllint
+        uses: actionshub/yamllint@v1.8.2
