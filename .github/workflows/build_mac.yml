@@ -5,27 +5,27 @@ on:
   pull_request:
     types: [opened, synchronize] # run when MR is opened and updated
     branches:
-        - master
+      - master
 
 jobs:
   build:
     runs-on: macos-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Install Brew
-      run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    
-    - name: Install Deps
-      run: brew install direnv asdf go-task yamllint
+      - name: Install Brew
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-    - name: Lint
-      run: yamllint --no-warnings *.yml
-    
-    - name: Generate New SSH-Key
-      run: task ssh-key --dry --yes
-    
-    - name: Run Setup
-      run: task setup
+      - name: Install Deps
+        run: brew install direnv asdf go-task yamllint
+
+      - name: Lint
+        run: yamllint --no-warnings *.yml
+
+      - name: Generate New SSH-Key
+        run: task ssh-key --dry --yes
+
+      - name: Run Setup
+        run: task setup
