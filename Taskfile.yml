@@ -120,6 +120,6 @@ tasks:
 
   vlang:
     cmds:
-    - cd ${HOME}/git && git clone https://github.com/vlang/v || echo "Skip if already cloned"
-    - cd ${HOME}/git/v && make
-    - cd ${HOME}/git/v && sudo ./v symlink
+      - cd ${HOME}/git && git clone https://github.com/vlang/v || echo "Skip if already cloned"
+      - cd ${HOME}/git/v && make
+      - cd ${HOME}/git/v && sudo ./v symlink
