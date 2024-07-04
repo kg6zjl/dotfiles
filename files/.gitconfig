@@ -9,4 +9,7 @@
 [push]
         autoSetupRemote = true
 [pull]
-        rebase=true
+        rebase = false
+
+[alias]
+        uncommit = reset --soft HEAD^
