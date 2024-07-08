@@ -48,9 +48,8 @@ tasks:
   files:
     deps: [dirs]
     cmds:
-      - ln -s files/dotprofile shellrc/.bash_profile
-      - cp files/dotprofile ${HOME}/.zprofile
-      - cp files/dotprofile ${HOME}/.bash_profile
+      - ln -s -f files/dotprofile shellrc/.bash_profile
+      - ln -s -f files/dotprofile shellrc/.zprofile
       - echo "Don't forget to run source ~/.zprofile or source ~/.bash_profile"
 
   # theory: these are more destructive actions that should
