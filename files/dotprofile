@@ -9,7 +9,6 @@ export GOPATH="${HOME}/go"
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Venv name is handled by oh-my-posh prompt config
 
 # local dotfile flags to enable/disable sections
-USE_ASDF_DOTFILE=false
 USE_PYENV_DOTFILE=true
 
 # set my favorite shortcuts
@@ -55,12 +54,6 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # setup direnv
 eval "$(direnv hook ${SHORT_SHELL})"
-
-# setup asdf
-if [[ "${USE_ASDF_DOTFILE}" == "true" ]]; then
-    . /opt/homebrew/opt/asdf/libexec/asdf.sh
-    export PATH="${HOME}/.asdf/bin:${HOME}/.asdf/shims:${PATH}"
-fi
 
 # setup pyenv/pyenv-virtualenv
 if [[ "${USE_ASDF_DOTFILE}" == "true" ]]; then

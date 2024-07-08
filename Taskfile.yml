@@ -3,7 +3,6 @@ version: '3'
 
 env:
   SSH_KEY: id_rsa
-  ASDF_VERSION: 1.3.1
 
 tasks:
   default:
@@ -13,7 +12,7 @@ tasks:
 
   setup:
     desc: Bootstrap your laptop dev environment
-    deps: [mac, dirs, files, init, brew, dotfiles, asdf, default-venv, mac-brew-pkgs, vlang]
+    deps: [mac, dirs, files, init, brew, dotfiles, default-venv, mac-brew-pkgs, vlang]
 
   dotfiles:
     aliases: [stow]
@@ -24,8 +23,8 @@ tasks:
       - stow -v -R -t ${HOME} vim
       - stow -v -R -t ${HOME} git
       - stow -v -R -t ${HOME} ohmyposh
-      - stow -v -R -t ${HOME} asdf-config
       - stow -v -R -t ${HOME} shellrc
+
   dirs:
     internal: true
     cmds:
@@ -60,22 +59,6 @@ tasks:
       - cp -n files/aws-config ${HOME}/.aws/config || echo "File already present"
       - cp -n files/ssh-config ${HOME}/.ssh/config || echo "File already present"
       - cp -n .envrc ${HOME}/git/.envrc || echo "File already present"
-
-  # installs the required plugin for asdf that allows
-  # us to manage everything else as a plugin definition
-  asdf:
-    cmds:
-      - asdf plugin add asdf-plugin-manager https://github.com/asdf-community/asdf-plugin-manager.git
-      - asdf plugin update asdf-plugin-manager v{{ .ASDF_VERSION }}
-      - asdf plugin-add direnv # direnv plugin via asdf-plugin-manager is broken....
-      - asdf install asdf-plugin-manager {{ .ASDF_VERSION }} # installs the plugin manager cli
-      - asdf global asdf-plugin-manager {{ .ASDF_VERSION }} # Set a version globally (on your ~/.tool-versions file)
-      - rm -rf /tmp/asdf-temp && mkdir -p /tmp/asdf-temp # running from a temp dir because asdf plugin manager seems to like a non-git directory to run in
-      - cp -r asdf-config/.*-versions /tmp/asdf-temp/
-      - cd /tmp/asdf-temp/ && ${HOME}/.asdf/installs/asdf-plugin-manager/{{ .ASDF_VERSION }}/bin/asdf-plugin-manager add-all
-      - cd /tmp/asdf-temp/ && asdf install
-      - rm -rf /tmp/asdf-temp # clean up our temp dir
-      - asdf direnv setup --shell $SHELL --version latest || echo "TODO - Ignore error here for now, direnv plugin is broken"
 
   default-venv:
     deps: [dirs]
@@ -114,7 +97,7 @@ tasks:
     cmds:
       - for: [
         warrensbox/tap/tfswitch, warrensbox/tap/tgswitch, tz, act, agg,
-        asciinema, asdf, bash, kubectl, exiftool, ffmpeg, gh, git, git-lfs,
+        asciinema, bash, kubectl, exiftool, ffmpeg, gh, git, git-lfs,
         grep, glow, gnu-sed, go, go-task, node, npm, gcc, llvm, maven,
         jsonlint, helm, helmfile, helmify, jq, k3d, kind,
         kubernetes-cli, librtlsdr, mcfly, podman, proxychains-ng,

@@ -9,7 +9,7 @@ Framework for my basic dev env. Trying to make it darwin and linux friendly!
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # brew install a few deps
-brew install direnv asdf go-task
+brew install direnv go-task
 
 # generate a new ssh-key if you need one
 task ssh-key
@@ -23,4 +23,5 @@ task setup
 - move file management to GNU Stow: https://www.gnu.org/software/stow/
     - taskfile feels nice for the rest, but file management will be easier with Stow
 - swap asdf for pkgx: https://github.com/pkgXdev/pkgx
-    - asdf is nice in some ways, but slow. There might be a happy middle ground with both
+    - asdf is nice in some ways, but slow and the plugins seem prone to issue
+    - i think i'll go the route of pkgx, pyenv, tfswitch, etc with direnv as the trigger for managing versions of things per directory
