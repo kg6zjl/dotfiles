@@ -17,6 +17,7 @@ tasks:
 
   dotfiles:
     aliases: [stow]
+    deps: [brew-pkgs]
     desc: Runs GNU Stow to symlink dotfiles across filesystem
     cmds:
       - stow -v -R -t ${HOME} wezterm
