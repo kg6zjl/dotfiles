@@ -153,9 +153,3 @@ tasks:
     desc: Find and lint all yml/yaml files
     cmds:
       - find . -type f \( -name '*.yaml' -o -name '*.yml' \) -exec yamllint --no-warnings {} \;
-
-  pyenv:
-    desc: Setup pyenv and plugins
-    cmds:
-      - curl https://pyenv.run | bash
-      - 
