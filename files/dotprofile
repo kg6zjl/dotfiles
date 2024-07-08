@@ -179,11 +179,13 @@ function pass() { #generate a unique password of n length, ie: pass 16
     fi
 }
 
-eval $(pkgx --shellcode)
+
 
 # insert any bash/zsh/etc commands that can't be switched using $SHORT_SHELL
 if [[ "$SHORT_SHELL" == "bash" ]]; then
     eval "$(fzf --bash)"
+    eval $(pkgx --shellcode) # docs.pkgx.sh/shellcode
 elif [[ "$SHORT_SHELL" == "zsh" ]]; then
     source <(fzf --zsh)
+    source <(pkgx --shellcode) # docs.pkgx.sh/shellcode
 fi

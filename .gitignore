@@ -7,3 +7,5 @@ vendor/
 *.exe
 .idea/
 *.iml
+AWSCLIV2.pkg
+*.pkg

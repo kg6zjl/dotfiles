@@ -12,11 +12,19 @@ tasks:
 
   setup:
     desc: Bootstrap your laptop dev environment
-    deps: [mac, dirs, files, init, brew, dotfiles, default-venv, mac-brew-pkgs, vlang]
+    cmds:
+      - task: mac
+      - task: dirs
+      - task: files
+      - task: init
+      - task: brew
+      - task: dotfiles
+      - task: default-venv
+      - task: mac-brew-pkgs
+      - task: vlang
 
   dotfiles:
     aliases: [stow]
-    deps: [brew-pkgs]
     desc: Runs GNU Stow to symlink dotfiles across filesystem
     cmds:
       - stow -v -R -t ${HOME} wezterm
@@ -47,8 +55,8 @@ tasks:
   files:
     deps: [dirs]
     cmds:
-      - ln -s -f files/dotprofile shellrc/.bash_profile
-      - ln -s -f files/dotprofile shellrc/.zprofile
+      - ln -s -f files/dotprofile shellrc/.bash_profile # stow handles the symlink into $HOME
+      - ln -s -f files/dotprofile shellrc/.zprofile # stow handles the symlink into $HOME
       - echo "Don't forget to run source ~/.zprofile or source ~/.bash_profile"
 
   # theory: these are more destructive actions that should
@@ -58,7 +66,6 @@ tasks:
     cmds:
       - cp -n files/aws-config ${HOME}/.aws/config || echo "File already present"
       - cp -n files/ssh-config ${HOME}/.ssh/config || echo "File already present"
-      - cp -n .envrc ${HOME}/git/.envrc || echo "File already present"
 
   default-venv:
     deps: [dirs]
