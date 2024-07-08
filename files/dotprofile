@@ -1,5 +1,5 @@
 # set common env vars
-export PATH="${HOME}/.asdf/bin:${HOME}/.asdf/shims:${HOME}/bin:${HOME}/go/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/opt:${HOME}/Library/Python/3.*/bin:$(/usr/bin/getconf PATH):/usr/local/bin"
+export PATH="${HOME}/bin:${HOME}/go/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/opt:${HOME}/Library/Python/3.*/bin:$(/usr/bin/getconf PATH):/usr/local/bin"
 export HISTCONTROL=ignorespace:ignoredupes:erasedups
 export DIRENV_LOG_FORMAT=
 export BASH_SILENCE_DEPRECATION_WARNING=1
@@ -7,6 +7,10 @@ export SHORT_SHELL="$(echo $(basename $SHELL))"
 export TZ_LIST="UTC;US/Pacific;US/Arizona;US/Mountain;US/Central;US/Eastern;Europe/London;Europe/Dublin"
 export GOPATH="${HOME}/go"
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Venv name is handled by oh-my-posh prompt config
+
+# local dotfile flags to enable/disable sections
+USE_ASDF_DOTFILE=false
+USE_PYENV_DOTFILE=true
 
 # set my favorite shortcuts
 alias gs="git status"
@@ -53,14 +57,25 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(direnv hook ${SHORT_SHELL})"
 
 # setup asdf
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
+if [[ "${USE_ASDF_DOTFILE}" == "true" ]]; then
+    . /opt/homebrew/opt/asdf/libexec/asdf.sh
+    export PATH="${HOME}/.asdf/bin:${HOME}/.asdf/shims:${PATH}"
+fi
 
-# setup switcher
+# setup pyenv/pyenv-virtualenv
+if [[ "${USE_ASDF_DOTFILE}" == "true" ]]; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+    echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
+fi
+
+# setup switcher (kube switch)
 source <(switcher init ${SHORT_SHELL})
 
 # setup KUBECONFIG env var for any individual config files
 unset KUBECONFIG && export KUBECONFIG=${HOME}/.kube/config
-for config in $(grep -irl 'kind: Config' ${HOME}/.kube | sort | uniq);
+for config in $(grep -irl 'kind: Config' ${HOME}/.kube | sort | uniq | grep -v '.switch_tmp');
 do
     export KUBECONFIG=${KUBECONFIG}:${config}
 done
@@ -170,3 +185,12 @@ function pass() { #generate a unique password of n length, ie: pass 16
         eval pwgen -Bs $1 1 | tr -d '\n';
     fi
 }
+
+eval $(pkgx --shellcode)
+
+# insert any bash/zsh/etc commands that can't be switched using $SHORT_SHELL
+if [[ "$SHORT_SHELL" == "bash" ]]; then
+    eval "$(fzf --bash)"
+elif [[ "$SHORT_SHELL" == "zsh" ]]; then
+    source <(fzf --zsh)
+fi

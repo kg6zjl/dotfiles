@@ -17,3 +17,10 @@ task ssh-key
 # kick off the setup
 task setup
 ```
+
+# TODO
+- setup Alacritty for cross-platform terminal emulator: https://alacritty.org/
+- move file management to GNU Stow: https://www.gnu.org/software/stow/
+    - taskfile feels nice for the rest, but file management will be easier with Stow
+- swap asdf for pkgx: https://github.com/pkgXdev/pkgx
+    - asdf is nice in some ways, but slow. There might be a happy middle ground with both

@@ -6,16 +6,36 @@ env:
   ASDF_VERSION: 1.3.1
 
 tasks:
-  setup:
-    deps: [lint, mac, dirs, files, init, brew, asdf, default-venv, mac-brew-pkgs, vlang]
+  default:
+    desc: <-- You are here
+    cmds:
+      - task --list-all
 
+  setup:
+    desc: Bootstrap your laptop dev environment
+    deps: [mac, dirs, files, init, brew, dotfiles, asdf, default-venv, mac-brew-pkgs, vlang]
+
+  dotfiles:
+    aliases: [stow]
+    desc: Runs GNU Stow to symlink dotfiles across filesystem
+    cmds:
+      - stow -v -R -t ${HOME} wezterm
+      - stow -v -R -t ${HOME} vim
+      - stow -v -R -t ${HOME} git
+      - stow -v -R -t ${HOME} ohmyposh
+      - stow -v -R -t ${HOME} asdf-config
+      - stow -v -R -t ${HOME} shellrc
   dirs:
+    internal: true
     cmds:
       - mkdir -p ${HOME}/.aws
       - mkdir -p ${HOME}/.ssh
       - mkdir -p ${HOME}/.kube
       - mkdir -p ${HOME}/.vscode
       - mkdir -p ${HOME}/.cargo
+      - mkdir -p ${HOME}/.pyenv
+      - mkdir -p ${HOME}/.pkgx
+      - mkdir -p ${HOME}/.config
       - mkdir -p ${HOME}/git
       - mkdir -p ${HOME}/go
       - mkdir -p ${HOME}/bin
@@ -27,13 +47,9 @@ tasks:
   files:
     deps: [dirs]
     cmds:
+      - ln -s files/dotprofile shellrc/.bash_profile
       - cp files/dotprofile ${HOME}/.zprofile
       - cp files/dotprofile ${HOME}/.bash_profile
-      - cp asdf-config/.tool-versions ${HOME}/.tool-versions
-      - cp asdf-config/.plugin-versions ${HOME}/.plugin-versions
-      - cp files/oh-my-posh.omp.json ${HOME}/oh-my-posh.omp.json
-      - cp files/vimrc ${HOME}/.vimrc
-      - cp files/.gitconfig ${HOME}/.gitconfig
       - echo "Don't forget to run source ~/.zprofile or source ~/.bash_profile"
 
   # theory: these are more destructive actions that should
@@ -70,6 +86,7 @@ tasks:
       - pip install -r files/py3-pip-requirements.txt
 
   ssh-key:
+    desc: This creates a new SSH Key and bootstraps it - Careful, it will overwrite any matching key names.
     deps: [dirs, files]
     prompt: This is a dangerous command... Do you want to continue? Backup your old ssh key(s) first.
     cmds:
@@ -79,16 +96,20 @@ tasks:
       - chmod 600 $HOME/.ssh/{{ .SSH_KEY }}
       - ssh-keygen -y -f $HOME/.ssh/{{ .SSH_KEY }} > $HOME/.ssh/{{ .SSH_KEY }}.pub
       - chmod 644 $HOME/.ssh/{{ .SSH_KEY }}.pub
+      - eval $(ssh-agent -s)
+      - ssh-add $HOME/.ssh/{{ .SSH_KEY }}
     requires:
       vars: [SSH_KEY]
 
   mac:
+    desc: Handle any Mac specific setup
     platforms: [darwin]
     cmds:
       - xcode-select --install || echo "Already installed"
       - curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg" && sudo installer -pkg AWSCLIV2.pkg -target / && rm AWSCLIV2.pkg
 
   brew-pkgs:
+    desc: Install all brew packages
     aliases: [brew]
     cmds:
       - for: [
@@ -99,7 +120,8 @@ tasks:
         kubernetes-cli, librtlsdr, mcfly, podman, proxychains-ng,
         rustup-init, danielfoehrkn/switch/switch, tor, tree, yq, yt-dlp, watch, tmux, yamllint,
         pwgen, azure-cli, glab, gawk, k3d, k9s, lazygit, mkcert, openssh,
-        opentofu, sops, skaffold, typescript
+        opentofu, sops, skaffold, typescript, fzf, yj, pyenv-virtualenv, --cask wezterm,
+        neovim, bat, eza, tldr, ripgrep, stow
       ]
         task: brew-install
         vars:
@@ -111,6 +133,7 @@ tasks:
       - brew install {{.PKG}}
 
   mac-brew-pkgs:
+    internal: true
     platforms: [darwin]
     cmds:
       - for: [sergiobenitez/osxct/x86_64-unknown-linux-gnu, telnet]
@@ -119,6 +142,7 @@ tasks:
           PKG: '{{.ITEM}}'
 
   vlang:
+    desc: Installs and Setup for vlang
     deps: [dirs]
     cmds:
       - cd ${HOME}/git && git clone https://github.com/vlang/v || echo "Skip if already cloned"
@@ -126,7 +150,12 @@ tasks:
       - cd ${HOME}/git/v && sudo ./v symlink
 
   lint:
+    desc: Find and lint all yml/yaml files
     cmds:
-      - yamllint --no-warnings *.yml
-      - yamllint --no-warnings .github/workflows/*.yml
-      - yamllint --no-warnings .yamllint
+      - find . -type f \( -name '*.yaml' -o -name '*.yml' \) -exec yamllint --no-warnings {} \;
+
+  pyenv:
+    desc: Setup pyenv and plugins
+    cmds:
+      - curl https://pyenv.run | bash
+      - 
