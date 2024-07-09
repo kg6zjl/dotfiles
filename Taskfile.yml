@@ -25,6 +25,7 @@ tasks:
 
   dotfiles:
     aliases: [stow]
+    deps: [files]
     desc: Runs GNU Stow to symlink dotfiles across filesystem
     cmds:
       - stow -v -R -t ${HOME} wezterm
@@ -55,8 +56,8 @@ tasks:
   files:
     deps: [dirs]
     cmds:
-      - ln -s -f files/dotprofile shellrc/.bash_profile # stow handles the symlink into $HOME
-      - ln -s -f files/dotprofile shellrc/.zprofile # stow handles the symlink into $HOME
+      - cp files/dotprofile shellrc/.bash_profile # stow handles the symlink into $HOME
+      - cp files/dotprofile shellrc/.zprofile # stow handles the symlink into $HOME
       - echo "Don't forget to run source ~/.zprofile or source ~/.bash_profile"
 
   # theory: these are more destructive actions that should
@@ -111,7 +112,8 @@ tasks:
         rustup-init, danielfoehrkn/switch/switch, tor, tree, yq, yt-dlp, watch, tmux, yamllint,
         pwgen, azure-cli, glab, gawk, k3d, k9s, lazygit, mkcert, openssh,
         opentofu, sops, skaffold, typescript, fzf, yj, pyenv-virtualenv, --cask wezterm,
-        neovim, bat, eza, tldr, ripgrep, stow
+        neovim, bat, eza, tldr, ripgrep, stow, readline, ncurses, font-meslo-lg-nerd-font,
+        --cask zed, pkgxdev/made/pkgx
       ]
         task: brew-install
         vars:
