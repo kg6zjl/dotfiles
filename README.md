@@ -18,6 +18,36 @@ task ssh-key
 task setup
 ```
 
+# pyenv and virtualenv
+```
+PYVERSION="3.12.4"
+VENV_NAME="sd-py3"
+
+# install a specific version
+pyenv install ${PYVERSION}
+
+# create a venv from that version
+pyenv virtualenv ${PYVERSION} ${VENV_NAME}
+
+# setup pyenv file
+echo ${PYVERSION} > .python-version
+
+# setup direnv
+echo "pyenv activate ${VENV_NAME}" >> .envrc
+```
+
+Fix for issue installing Python on M1 Pro:
+```
+brew install python-tk@3.12; \
+
+brew unlink pkg-config; \
+CFLAGS="-I$(brew --prefix openssl)/include" \
+LDFLAGS="-L$(brew --prefix openssl)/lib" \
+CC="/usr/bin/gcc" \
+env PYTHON_CONFIGURE_OPTS="--enable-framework" CONFIGURE_OPTS='--enable-optimizations' pyenv install 3.12.4
+brew link pkg-config
+```
+
 # TODO
 - setup Alacritty for cross-platform terminal emulator: https://alacritty.org/
 - move file management to GNU Stow: https://www.gnu.org/software/stow/
