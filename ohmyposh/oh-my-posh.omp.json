@@ -5,7 +5,8 @@
             "alignment": "left",
             "segments": [
                 {
-                    "foreground": "#FFEE58",
+                    "background": "#3A3A3A",
+                    "foreground": "#ffffff",
                     "style": "plain",
                     "template": " \uf0e7 ",
                     "type": "root"
@@ -15,8 +16,8 @@
                     "style": "diamond",
                     "leading_diamond": "",
                     "trailing_diamond": "",
-                    "foreground": "#ffffff",
-                    "background": "#0077c2",
+                    "background": "#458588",
+                    "foreground": "#282828",
                     "properties": {
                         "mapped_shell_names": {
                             "pwsh": "POWERSHELL",
@@ -25,8 +26,8 @@
                     }
                 },
                 {
-                    "background": "#91ddff",
-                    "foreground": "#100e23",
+                    "background": "#977b63",
+                    "foreground": "#282828",
                     "powerline_symbol": "\ue0b0",
                     "properties": {
                         "style": "agnoster_short",
@@ -39,16 +40,16 @@
                     "mixed_threshold": "4"
                 },
                 {
-                    "background": "#95ffa4",
-                    "foreground": "#193549",
+                    "background": "#78a5be",
+                    "foreground": "#111111",
                     "powerline_symbol": "\ue0b0",
                     "style": "powerline",
                     "template": " {{ .HEAD }} ",
                     "type": "git"
                 },
                 {
-                    "background": "#906cff",
-                    "foreground": "#100e23",
+                    "background": "#4063D8",
+                    "foreground": "#111111",
                     "powerline_symbol": "\ue0b0",
                     "style": "powerline",
                     "template": " \ue235 {{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }} ",
@@ -58,8 +59,8 @@
                     "type": "kubectl",
                     "style": "powerline",
                     "powerline_symbol": "\ue0b0",
-                    "foreground": "#000000",
-                    "background": "#ebcc34",
+                    "background": "#b3a56f",
+                    "foreground": "#111111",
                     "template": " ⎈ {{.Context}}{{if .Namespace}} :: {{.Namespace}}{{end}} ",
                     "properties": {
                         "context_aliases": {}
@@ -69,15 +70,15 @@
                     "type": "command",
                     "style": "powerline",
                     "powerline_symbol": "\ue0b0",
-                    "foreground": "#546E7A",
-                    "background": "#26C6DA",
+                    "background": "#FEAC19",
+                    "foreground": "#ffffff",
                     "properties": {
                       "shell": "bash",
                       "command": "EXPIRATION=$(cat ${HOME}/.aws/sso/cache/*.json | jq -r '.expiresAt | fromdate - (fromdate % 1800)'); NOW=$(date +%s); REMAINING=$((EXPIRATION-NOW)); date -ud \"@$REMAINING\" +\"%H:%M\""
                     }
                 },
                 {
-                    "background": "#ff8080",
+                    "background": "#8f5151",
                     "foreground": "#ffffff",
                     "powerline_symbol": "\ue0b0",
                     "style": "powerline",
