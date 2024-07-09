@@ -16,7 +16,7 @@ alias gs="git status"
 alias ga="git add \`git status -s --porcelain | pick -c 2\`" # git add (prompt for file)
 alias gd="git rm \`git status -s | grep '^D' | pick -c 2\`" # git delete (prompt for file)
 alias gcb="git checkout \`git branch | tr -d '* ' | pick\`" # git change branch (prompt for branch)
-alias ll="ls -lah"
+alias ll="eza -l -X --all --no-git --extended --changed"
 alias icd="cd \`ls -d -1 */ | pick\`" # interactive cd
 alias ip="curl -s http://checkip.amazonaws.com"
 alias tf="terraform"
@@ -38,6 +38,7 @@ alias vsc="open -n -b com.microsoft.VSCode --args $PWD"
 alias utc="tz -q"
 alias dot="cd ${HOME}/git/dotfiles"
 alias files="cd ${HOME}/git/dotfiles && task files && source ~/.zprofile"
+alias vim="nvim"
 
 # handle zsh auto-completion
 autoload -Uz compinit || echo "This might fail in bash"
@@ -179,7 +180,9 @@ function pass() { #generate a unique password of n length, ie: pass 16
     fi
 }
 
-
+# setup pyenv and pyenv-venv
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
 
 # insert any bash/zsh/etc commands that can't be switched using $SHORT_SHELL
 if [[ "$SHORT_SHELL" == "bash" ]]; then
