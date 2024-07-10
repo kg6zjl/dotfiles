@@ -9,3 +9,6 @@ vendor/
 *.iml
 AWSCLIV2.pkg
 *.pkg
+shellrc/*
+shellrc/.bash_profile
+shellrc/.zprofile

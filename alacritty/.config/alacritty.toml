@@ -1,0 +1,31 @@
+[font]
+normal = { family = "MesloLGM Nerd Font", style = "Regular" }
+size = 14   
+
+[window]
+title = "Terminal"
+padding = { x = 6, y = 6 }
+opacity = 0.75
+blur = true
+startup_mode = "Windowed"
+dynamic_title = true
+option_as_alt = "Both"
+
+[scrolling]
+history = 10000
+
+[selection]
+semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
+save_to_clipboard = true
+
+[cursor]
+style = { "shape" = "Underline", "blinking" = "on" }
+blink_interval = 600
+unfocused_hollow = false
+
+[keyboard]
+bindings = [
+    { "key" = "Right", "mods" = "Alt", "chars" = "\\x1BF" },
+    { "key" = "Left",  "mods" = "Option", "chars" = "\\x1BB" }
+]
+

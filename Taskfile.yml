@@ -24,15 +24,18 @@ tasks:
       - task: vlang
 
   dotfiles:
+    desc: Copy/symlink/stow all dotfiles
     aliases: [stow]
-    deps: [files]
-    desc: Runs GNU Stow to symlink dotfiles across filesystem
     cmds:
-      - stow -v -R -t ${HOME} wezterm
-      - stow -v -R -t ${HOME} vim
-      - stow -v -R -t ${HOME} git
-      - stow -v -R -t ${HOME} ohmyposh
-      - stow -v -R -t ${HOME} shellrc
+      - for: [wezterm, alacritty, vim, git, ohmyposh, shellrc, zed]
+        task: stow-runner
+        vars:
+          PKG: '{{.ITEM}}'
+
+  stow-runner:
+    internal: true
+    cmds:
+      - stow -v -R -t ${HOME} {{.PKG}}
 
   dirs:
     internal: true
