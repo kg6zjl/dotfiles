@@ -18,6 +18,12 @@ task ssh-key
 task setup
 ```
 
+# alacritty terminal emulator
+Config options are detailed here: https://alacritty.org/config-alacritty.html
+
+# zed IDE
+Config options are detailed here: https://zed.dev/docs/configuring-zed
+
 # pyenv and virtualenv
 ```
 PYVERSION="3.12.4"
