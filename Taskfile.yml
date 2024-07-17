@@ -114,9 +114,8 @@ tasks:
         kubernetes-cli, librtlsdr, mcfly, podman, proxychains-ng,
         rustup-init, danielfoehrkn/switch/switch, tor, tree, yq, yt-dlp, watch, tmux, yamllint,
         pwgen, azure-cli, glab, gawk, k3d, k9s, lazygit, mkcert, openssh,
-        opentofu, sops, skaffold, typescript, fzf, yj, pyenv-virtualenv, --cask wezterm,
-        neovim, bat, eza, tldr, ripgrep, stow, readline, ncurses, font-meslo-lg-nerd-font,
-        --cask zed, pkgxdev/made/pkgx
+        opentofu, sops, skaffold, typescript, fzf, yj, pyenv-virtualenv
+        neovim, bat, eza, tldr, ripgrep, stow, readline, ncurses, font-meslo-lg-nerd-font, pkgxdev/made/pkgx
       ]
         task: brew-install
         vars:
