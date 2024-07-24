@@ -19,7 +19,7 @@ jobs:
         run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
       - name: Install Deps
-        run: brew install direnv asdf go-task yamllint
+        run: brew install direnv go-task yamllint
 
       - name: Lint
         run: yamllint --no-warnings *.yml

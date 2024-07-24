@@ -3,19 +3,51 @@ version: '3'
 
 env:
   SSH_KEY: id_rsa
-  ASDF_VERSION: 1.3.1
 
 tasks:
+  default:
+    desc: <-- You are here
+    cmds:
+      - task --list-all
+
   setup:
-    deps: [lint, mac, dirs, files, init, brew, asdf, default-venv, mac-brew-pkgs, vlang]
+    desc: Bootstrap your laptop dev environment
+    cmds:
+      - task: mac
+      - task: dirs
+      - task: files
+      - task: init
+      - task: brew
+      - task: dotfiles
+      - task: default-venv
+      - task: mac-brew-pkgs
+      - task: vlang
+
+  dotfiles:
+    desc: Copy/symlink/stow all dotfiles
+    aliases: [stow]
+    cmds:
+      - for: [wezterm, alacritty, vim, git, ohmyposh, shellrc, zed]
+        task: stow-runner
+        vars:
+          PKG: '{{.ITEM}}'
+
+  stow-runner:
+    internal: true
+    cmds:
+      - stow -v -R -t ${HOME} {{.PKG}}
 
   dirs:
+    internal: true
     cmds:
       - mkdir -p ${HOME}/.aws
       - mkdir -p ${HOME}/.ssh
       - mkdir -p ${HOME}/.kube
       - mkdir -p ${HOME}/.vscode
       - mkdir -p ${HOME}/.cargo
+      - mkdir -p ${HOME}/.pyenv
+      - mkdir -p ${HOME}/.pkgx
+      - mkdir -p ${HOME}/.config
       - mkdir -p ${HOME}/git
       - mkdir -p ${HOME}/go
       - mkdir -p ${HOME}/bin
@@ -27,13 +59,8 @@ tasks:
   files:
     deps: [dirs]
     cmds:
-      - cp files/dotprofile ${HOME}/.zprofile
-      - cp files/dotprofile ${HOME}/.bash_profile
-      - cp asdf-config/.tool-versions ${HOME}/.tool-versions
-      - cp asdf-config/.plugin-versions ${HOME}/.plugin-versions
-      - cp files/oh-my-posh.omp.json ${HOME}/oh-my-posh.omp.json
-      - cp files/vimrc ${HOME}/.vimrc
-      - cp files/.gitconfig ${HOME}/.gitconfig
+      - cp files/dotprofile shellrc/.bash_profile # stow handles the symlink into $HOME
+      - cp files/dotprofile shellrc/.zprofile # stow handles the symlink into $HOME
       - echo "Don't forget to run source ~/.zprofile or source ~/.bash_profile"
 
   # theory: these are more destructive actions that should
@@ -43,23 +70,6 @@ tasks:
     cmds:
       - cp -n files/aws-config ${HOME}/.aws/config || echo "File already present"
       - cp -n files/ssh-config ${HOME}/.ssh/config || echo "File already present"
-      - cp -n .envrc ${HOME}/git/.envrc || echo "File already present"
-
-  # installs the required plugin for asdf that allows
-  # us to manage everything else as a plugin definition
-  asdf:
-    cmds:
-      - asdf plugin add asdf-plugin-manager https://github.com/asdf-community/asdf-plugin-manager.git
-      - asdf plugin update asdf-plugin-manager v{{ .ASDF_VERSION }}
-      - asdf plugin-add direnv # direnv plugin via asdf-plugin-manager is broken....
-      - asdf install asdf-plugin-manager {{ .ASDF_VERSION }} # installs the plugin manager cli
-      - asdf global asdf-plugin-manager {{ .ASDF_VERSION }} # Set a version globally (on your ~/.tool-versions file)
-      - rm -rf /tmp/asdf-temp && mkdir -p /tmp/asdf-temp # running from a temp dir because asdf plugin manager seems to like a non-git directory to run in
-      - cp -r asdf-config/.*-versions /tmp/asdf-temp/
-      - cd /tmp/asdf-temp/ && ${HOME}/.asdf/installs/asdf-plugin-manager/{{ .ASDF_VERSION }}/bin/asdf-plugin-manager add-all
-      - cd /tmp/asdf-temp/ && asdf install
-      - rm -rf /tmp/asdf-temp # clean up our temp dir
-      - asdf direnv setup --shell $SHELL --version latest || echo "TODO - Ignore error here for now, direnv plugin is broken"
 
   default-venv:
     deps: [dirs]
@@ -70,6 +80,7 @@ tasks:
       - pip install -r files/py3-pip-requirements.txt
 
   ssh-key:
+    desc: This creates a new SSH Key and bootstraps it - Careful, it will overwrite any matching key names.
     deps: [dirs, files]
     prompt: This is a dangerous command... Do you want to continue? Backup your old ssh key(s) first.
     cmds:
@@ -79,27 +90,32 @@ tasks:
       - chmod 600 $HOME/.ssh/{{ .SSH_KEY }}
       - ssh-keygen -y -f $HOME/.ssh/{{ .SSH_KEY }} > $HOME/.ssh/{{ .SSH_KEY }}.pub
       - chmod 644 $HOME/.ssh/{{ .SSH_KEY }}.pub
+      - eval $(ssh-agent -s)
+      - ssh-add $HOME/.ssh/{{ .SSH_KEY }}
     requires:
       vars: [SSH_KEY]
 
   mac:
+    desc: Handle any Mac specific setup
     platforms: [darwin]
     cmds:
       - xcode-select --install || echo "Already installed"
       - curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg" && sudo installer -pkg AWSCLIV2.pkg -target / && rm AWSCLIV2.pkg
 
   brew-pkgs:
+    desc: Install all brew packages
     aliases: [brew]
     cmds:
       - for: [
         warrensbox/tap/tfswitch, warrensbox/tap/tgswitch, tz, act, agg,
-        asciinema, asdf, bash, kubectl, exiftool, ffmpeg, gh, git, git-lfs,
+        asciinema, bash, kubectl, exiftool, ffmpeg, gh, git, git-lfs,
         grep, glow, gnu-sed, go, go-task, node, npm, gcc, llvm, maven,
         jsonlint, helm, helmfile, helmify, jq, k3d, kind,
         kubernetes-cli, librtlsdr, mcfly, podman, proxychains-ng,
         rustup-init, danielfoehrkn/switch/switch, tor, tree, yq, yt-dlp, watch, tmux, yamllint,
         pwgen, azure-cli, glab, gawk, k3d, k9s, lazygit, mkcert, openssh,
-        opentofu, sops, skaffold, typescript
+        opentofu, sops, skaffold, typescript, fzf, yj, pyenv-virtualenv
+        neovim, bat, eza, tldr, ripgrep, stow, readline, ncurses, font-meslo-lg-nerd-font, pkgxdev/made/pkgx
       ]
         task: brew-install
         vars:
@@ -111,6 +127,7 @@ tasks:
       - brew install {{.PKG}}
 
   mac-brew-pkgs:
+    internal: true
     platforms: [darwin]
     cmds:
       - for: [sergiobenitez/osxct/x86_64-unknown-linux-gnu, telnet]
@@ -119,6 +136,7 @@ tasks:
           PKG: '{{.ITEM}}'
 
   vlang:
+    desc: Installs and Setup for vlang
     deps: [dirs]
     cmds:
       - cd ${HOME}/git && git clone https://github.com/vlang/v || echo "Skip if already cloned"
@@ -126,7 +144,6 @@ tasks:
       - cd ${HOME}/git/v && sudo ./v symlink
 
   lint:
+    desc: Find and lint all yml/yaml files
     cmds:
-      - yamllint --no-warnings *.yml
-      - yamllint --no-warnings .github/workflows/*.yml
-      - yamllint --no-warnings .yamllint
+      - find . -type f \( -name '*.yaml' -o -name '*.yml' \) -exec yamllint --no-warnings {} \;

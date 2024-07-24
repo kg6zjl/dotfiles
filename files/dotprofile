@@ -1,5 +1,5 @@
 # set common env vars
-export PATH="${HOME}/.asdf/bin:${HOME}/.asdf/shims:${HOME}/bin:${HOME}/go/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/opt:${HOME}/Library/Python/3.*/bin:$(/usr/bin/getconf PATH):/usr/local/bin"
+export PATH="${HOME}/bin:${HOME}/go/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/opt:${HOME}/Library/Python/3.*/bin:$(/usr/bin/getconf PATH):/usr/local/bin"
 export HISTCONTROL=ignorespace:ignoredupes:erasedups
 export DIRENV_LOG_FORMAT=
 export BASH_SILENCE_DEPRECATION_WARNING=1
@@ -8,12 +8,15 @@ export TZ_LIST="UTC;US/Pacific;US/Arizona;US/Mountain;US/Central;US/Eastern;Euro
 export GOPATH="${HOME}/go"
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Venv name is handled by oh-my-posh prompt config
 
+# local dotfile flags to enable/disable sections
+USE_PYENV_DOTFILE=true
+
 # set my favorite shortcuts
 alias gs="git status"
 alias ga="git add \`git status -s --porcelain | pick -c 2\`" # git add (prompt for file)
 alias gd="git rm \`git status -s | grep '^D' | pick -c 2\`" # git delete (prompt for file)
 alias gcb="git checkout \`git branch | tr -d '* ' | pick\`" # git change branch (prompt for branch)
-alias ll="ls -lah"
+alias ll="eza -l -X --all --no-git --changed"
 alias icd="cd \`ls -d -1 */ | pick\`" # interactive cd
 alias ip="curl -s http://checkip.amazonaws.com"
 alias tf="terraform"
@@ -35,6 +38,7 @@ alias vsc="open -n -b com.microsoft.VSCode --args $PWD"
 alias utc="tz -q"
 alias dot="cd ${HOME}/git/dotfiles"
 alias files="cd ${HOME}/git/dotfiles && task files && source ~/.zprofile"
+alias vim="nvim"
 
 # handle zsh auto-completion
 autoload -Uz compinit || echo "This might fail in bash"
@@ -52,15 +56,20 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # setup direnv
 eval "$(direnv hook ${SHORT_SHELL})"
 
-# setup asdf
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
+# setup pyenv/pyenv-virtualenv
+if [[ "${USE_ASDF_DOTFILE}" == "true" ]]; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+    echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
+fi
 
-# setup switcher
+# setup switcher (kube switch)
 source <(switcher init ${SHORT_SHELL})
 
 # setup KUBECONFIG env var for any individual config files
 unset KUBECONFIG && export KUBECONFIG=${HOME}/.kube/config
-for config in $(grep -irl 'kind: Config' ${HOME}/.kube | sort | uniq);
+for config in $(grep -irl 'kind: Config' ${HOME}/.kube | sort | uniq | grep -v '.switch_tmp');
 do
     export KUBECONFIG=${KUBECONFIG}:${config}
 done
@@ -170,3 +179,16 @@ function pass() { #generate a unique password of n length, ie: pass 16
         eval pwgen -Bs $1 1 | tr -d '\n';
     fi
 }
+
+# setup pyenv and pyenv-venv
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+# insert any bash/zsh/etc commands that can't be switched using $SHORT_SHELL
+if [[ "$SHORT_SHELL" == "bash" ]]; then
+    eval "$(fzf --bash)"
+    eval $(pkgx --shellcode) # docs.pkgx.sh/shellcode
+elif [[ "$SHORT_SHELL" == "zsh" ]]; then
+    source <(fzf --zsh)
+    source <(pkgx --shellcode) # docs.pkgx.sh/shellcode
+fi
