@@ -67,14 +67,22 @@
                     }
                 },
                 {
+                    "type": "aws",
+                    "style": "powerline",
+                    "powerline_symbol": "\ue0b0",
+                    "foreground": "#111111",
+                    "background": "#607d8b",
+                    "template": " \uE7AD {{ .Profile }}{{ if .Region }}@{{ .Region }}{{ end }} "
+                },
+                {
                     "type": "command",
                     "style": "powerline",
                     "powerline_symbol": "\ue0b0",
-                    "background": "#FEAC19",
-                    "foreground": "#ffffff",
+                    "background": "#74995b",
+                    "foreground": "#111111",
                     "properties": {
                       "shell": "bash",
-                      "command": "EXPIRATION=$(cat ${HOME}/.aws/sso/cache/*.json | jq -r '.expiresAt | fromdate - (fromdate % 1800)'); NOW=$(date +%s); REMAINING=$((EXPIRATION-NOW)); date -ud \"@$REMAINING\" +\"%H:%M\""
+                      "command": "FILE=$(grep -n -l 'startUrl' ${HOME}/.aws/sso/cache/*.json | head -n1); EXPIRATION=$(jq -r '.expiresAt' ${FILE} | xargs -I {} date -jf '%Y-%m-%dT%H:%M:%SZ' {} +%s | sort -n | tail -1); NOW=$(date +%s); REMAINING=$((EXPIRATION-NOW)); if [ $REMAINING -gt 0 ]; then date -u -r $REMAINING +\"%H:%M\"; else echo 'Expired'; fi"
                     }
                 },
                 {

@@ -7,6 +7,12 @@ export SHORT_SHELL="$(echo $(basename $SHELL))"
 export TZ_LIST="UTC;US/Pacific;US/Arizona;US/Mountain;US/Central;US/Eastern;Europe/London;Europe/Dublin"
 export GOPATH="${HOME}/go"
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Venv name is handled by oh-my-posh prompt config
+export AWS_PROFILE="$(cat ${HOME}/.aws/current_profile)" # always set var
+
+if [[ "${SHORT_SHELL}" == "zsh" ]]; then
+    autoload -Uz compinit
+    compinit
+fi
 
 # local dotfile flags to enable/disable sections
 USE_PYENV_DOTFILE=true
@@ -39,33 +45,20 @@ alias utc="tz -q"
 alias dot="cd ${HOME}/git/dotfiles"
 alias files="cd ${HOME}/git/dotfiles && task files && source ~/.zprofile"
 alias vim="nvim"
+alias python="python3"
 
-# handle zsh auto-completion
-autoload -Uz compinit || echo "This might fail in bash"
-compinit || echo "This might fail in bash"
+function awsacct() {
+    aws configure list-profiles | sort | fzf --layout=reverse --height=-50% --border > ${HOME}/.aws/current_profile
+    export AWS_PROFILE="$(cat ${HOME}/.aws/current_profile)"
+    export aws="aws --profile ${AWS_PROFILE}"
+}
 
-# set up prompt
-eval "$(oh-my-posh --init --shell ${SHORT_SHELL} --config ${HOME}/oh-my-posh.omp.json)"
-
-# setup mcfly for history
-eval "$(mcfly init ${SHORT_SHELL})"
-
-# setup home brew
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
-# setup direnv
-eval "$(direnv hook ${SHORT_SHELL})"
-
-# setup pyenv/pyenv-virtualenv
-if [[ "${USE_ASDF_DOTFILE}" == "true" ]]; then
-    export PYENV_ROOT="$HOME/.pyenv"
-    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init -)"
-    echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
-fi
 
 # setup switcher (kube switch)
 source <(switcher init ${SHORT_SHELL})
+
+# cleanup desktop screenshots
+${HOME}/git/dotfiles/files/screenshot_handler.sh
 
 # setup KUBECONFIG env var for any individual config files
 unset KUBECONFIG && export KUBECONFIG=${HOME}/.kube/config
@@ -180,15 +173,50 @@ function pass() { #generate a unique password of n length, ie: pass 16
     fi
 }
 
-# setup pyenv and pyenv-venv
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+# RUN ONCE
+RUN_INTEGRATIONS=false
 
-# insert any bash/zsh/etc commands that can't be switched using $SHORT_SHELL
-if [[ "$SHORT_SHELL" == "bash" ]]; then
-    eval "$(fzf --bash)"
-    eval $(pkgx --shellcode) # docs.pkgx.sh/shellcode
-elif [[ "$SHORT_SHELL" == "zsh" ]]; then
-    source <(fzf --zsh)
-    source <(pkgx --shellcode) # docs.pkgx.sh/shellcode
+if [[ "${RUN_INTEGRATIONS}" == "true" ]]; then
+    # setup mcfly for history
+    eval "$(mcfly init ${SHORT_SHELL})"
+
+    # setup home brew
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+
+    # setup direnv
+    eval "$(direnv hook ${SHORT_SHELL})"
+    
+    # setup pyenv and pyenv-venv
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+    
+    # setup fzf
+    if [[ "${SHORT_SHELL}" == "bash" ]]; then
+        eval "$(fzf --bash)"
+    elif [[ "${SHORT_SHELL}" == "zsh" ]]; then
+        source <(fzf --zsh)
+    fi
+
+    # setup pkgx
+    eval "$(pkgx integrate > /dev/null 2>&1)" # docs.pkgx.sh/shellcode
+
+    # setup pyenv/pyenv-virtualenv
+    if [[ "${USE_PYENV_DOTFILE}" == "true" ]]; then
+        export PYENV_ROOT="$HOME/.pyenv"
+        command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+        eval "$(pyenv init -)"
+        echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
+    fi
 fi
+
+# setup mcfly for history
+eval "$(mcfly init ${SHORT_SHELL})"
+
+# setup home brew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# setup prompt
+eval "$(oh-my-posh --init --shell ${SHORT_SHELL} --config ${HOME}/oh-my-posh.omp.json)"
+
+# setup direnv
+eval "$(direnv hook ${SHORT_SHELL})"

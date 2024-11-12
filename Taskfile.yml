@@ -13,7 +13,6 @@ tasks:
   setup:
     desc: Bootstrap your laptop dev environment
     cmds:
-      - task: mac
       - task: dirs
       - task: files
       - task: init
@@ -21,13 +20,13 @@ tasks:
       - task: dotfiles
       - task: default-venv
       - task: mac-brew-pkgs
-      - task: vlang
 
   dotfiles:
     desc: Copy/symlink/stow all dotfiles
+    deps: [files]
     aliases: [stow]
     cmds:
-      - for: [wezterm, alacritty, vim, git, ohmyposh, shellrc, zed]
+      - for: [wezterm, alacritty, git, ohmyposh, shellrc, zed]
         task: stow-runner
         vars:
           PKG: '{{.ITEM}}'
@@ -74,9 +73,9 @@ tasks:
   default-venv:
     deps: [dirs]
     cmds:
-      - python -m venv ${HOME}/venvs/py3-venv
+      - python3 -m venv ${HOME}/venvs/py3-venv
       - source ${HOME}/venvs/py3-venv/bin/activate
-      - python -m ensurepip --upgrade || echo "Ignore errors"
+      - python3 -m ensurepip --upgrade || echo "Ignore errors"
       - pip install -r files/py3-pip-requirements.txt
 
   ssh-key:
@@ -95,12 +94,12 @@ tasks:
     requires:
       vars: [SSH_KEY]
 
-  mac:
-    desc: Handle any Mac specific setup
-    platforms: [darwin]
-    cmds:
-      - xcode-select --install || echo "Already installed"
-      - curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg" && sudo installer -pkg AWSCLIV2.pkg -target / && rm AWSCLIV2.pkg
+  # mac:
+  #   desc: Handle any Mac specific setup
+  #   platforms: [darwin]
+  #   cmds:
+  #     - xcode-select --install || echo "Already installed"
+  #     - curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg" && sudo installer -pkg AWSCLIV2.pkg -target / && rm AWSCLIV2.pkg
 
   brew-pkgs:
     desc: Install all brew packages
@@ -115,7 +114,8 @@ tasks:
         rustup-init, danielfoehrkn/switch/switch, tor, tree, yq, yt-dlp, watch, tmux, yamllint,
         pwgen, azure-cli, glab, gawk, k3d, k9s, lazygit, mkcert, openssh,
         opentofu, sops, skaffold, typescript, fzf, yj, pyenv-virtualenv
-        neovim, bat, eza, tldr, ripgrep, stow, readline, ncurses, font-meslo-lg-nerd-font, pkgxdev/made/pkgx
+        neovim, bat, eza, tldr, ripgrep, stow, readline, ncurses, font-meslo-lg-nerd-font, pkgxdev/made/pkgx,
+        oh-my-posh
       ]
         task: brew-install
         vars:
@@ -134,14 +134,6 @@ tasks:
         task: brew-install
         vars:
           PKG: '{{.ITEM}}'
-
-  vlang:
-    desc: Installs and Setup for vlang
-    deps: [dirs]
-    cmds:
-      - cd ${HOME}/git && git clone https://github.com/vlang/v || echo "Skip if already cloned"
-      - cd ${HOME}/git/v && make
-      - cd ${HOME}/git/v && sudo ./v symlink
 
   lint:
     desc: Find and lint all yml/yaml files
