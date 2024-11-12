@@ -80,7 +80,6 @@ syncedlyrics
 text-unidecode
 tinycss2
 toml
-torch
 typing_extensions
 Unidecode
 urllib3
@@ -89,9 +88,6 @@ watchdog
 webencodings
 websockets
 wrapt
-yt-dlp
-ytmusicapi
-ziglang
 boto
 boto3
 botocore
