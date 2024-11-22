@@ -82,7 +82,7 @@
                     "foreground": "#111111",
                     "properties": {
                       "shell": "bash",
-                      "command": "FILE=$(grep -n -l 'startUrl' ${HOME}/.aws/sso/cache/*.json | head -n1); EXPIRATION=$(jq -r '.expiresAt' ${FILE} | xargs -I {} date -jf '%Y-%m-%dT%H:%M:%SZ' {} +%s | sort -n | tail -1); NOW=$(date +%s); REMAINING=$((EXPIRATION-NOW)); if [ $REMAINING -gt 0 ]; then date -u -r $REMAINING +\"%H:%M\"; else echo 'Expired'; fi"
+                      "command": "FILE=$(ls -t ${HOME}/.aws/sso/cache/*.json | xargs grep -n -l 'startUrl' | head -n1); EXPIRATION=$(jq -r '.expiresAt' ${FILE} | xargs -I {} date -jf '%Y-%m-%dT%H:%M:%SZ' {} +%s | sort -n | tail -1); NOW=$(date +%s); REMAINING=$((EXPIRATION-NOW)); if [ $REMAINING -gt 0 ]; then date -u -r $REMAINING +\"%H:%M\"; else echo 'Expired'; fi"
                     }
                 },
                 {
